@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Alert from "@material-ui/core/Alert"
 
 class CreatePost extends React.Component {
   constructor(props) {
@@ -24,23 +25,26 @@ class CreatePost extends React.Component {
 
   handleSubmit(){
     axios.post('api/v1/posts', this.state).then(
-      res => { this.divSubmitResult.innerHTML = "<p>Following post has been created: " + res.data + "</p>";
-               this.divSubmitResult.style["background-color"] = "#01DF3A";
-               this.divSubmitResult.style["color"] = "#FFFFFF";
-            },
-      err => { this.divSubmitResult.innerHTML = "<p>Error: Couldn't create post: " + err.data + "</p>";
-               this.divSubmitResult.style["background-color"] = "#FF0000"; 
-               this.divSubmitResult.style["color"] = "#FFFFFF";
+      res => { 
+        return (
+          <Alert severity="success">
+            <p>Your post has been created: {res.data}</p>
+          </Alert>
+        );
+      },
+      err => { 
+        return(
+          <Alert severity="success">
+            <p>Error: your post couldn't be created: {err.data}</p>
+          </Alert>
+        );
       } 
     );
   }
 
-  divSubmitResult = "";
-
   render() {
     return (
       <div>
-        <div ref={c => (this.divSubmitResult = c)}></div>
         <form onSubmit={() => this.handleSubmit()}>
           <label>
             Description:
@@ -50,11 +54,6 @@ class CreatePost extends React.Component {
               value={this.state.description}
               onChange={this.handleInputChange} />
           </label>
-          <input
-              name="author"
-              type="hidden"
-              value={this.state.author}
-        />
           <br/>
           <input type="submit" value="Post"/>
         </form>
