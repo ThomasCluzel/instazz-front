@@ -1,12 +1,18 @@
 import React from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import Snackbar from "@material-ui/core/Snackbar";
+import TextField from '@material-ui/core/TextField';
+import Button from "@material-ui/core/Button";
+import Alert from "@material-ui/lab/Alert";
 
 class Connect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      pseudo: ""
+      pseudo: "",
+      password: "",
+      errorAlert: false,
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -23,35 +29,39 @@ class Connect extends React.Component {
     });
   }
 
-  handleSubmit(){
-    axios.post('api/v1/connect', this.state).then(
-      res => { console.log(this.state.pseudo + " is connected.");
-              return <Redirect to='api/v1/posts'/>;
-            },
-      err => { this.divSubmitResult.innerHTML = "<p>Error: Couldn't connect: " + err.data + "</p>";
-               this.divSubmitResult.style["background-color"] = "#FF0000"; 
-               this.divSubmitResult.style["color"] = "#FFFFFF";
-      } 
+  handleSubmit(e){
+    axios.post('api/v1/connect', this.state.pseudo).then(
+      res => { 
+        console.log(this.state.pseudo + " is connected.");
+        return (
+            <Redirect to='api/v1/posts'/>
+        );
+      },
+      err => { 
+        console.log("Error: " + err);
+        this.setState({errorAlert: true});
+        e.preventDefault();
+      }
     );
-  }
 
-  divSubmitResult = "";
+  }
 
   render() {
     return (
       <div>
-        <div ref={c => (this.divSubmitResult = c)}></div>
-        <form onSubmit={() => this.handleSubmit()}>
-          <label>
-            Pseudo:
-            <input
-              name="pseudo"
-              type="text"
-              value={this.state.pseudo}
-              onChange={this.handleInputChange} />
-          </label>
+        <Snackbar open={this.state.errorAlert}>
+          <Alert severity="error">
+            <p>Wrong pseudo or password</p>
+          </Alert>
+        </Snackbar>
+        <form onSubmit={(e) => this.handleSubmit(e)}>
+          <TextField name="pseudo" required id="standard-required" label="Pseudo" defaultValue={this.state.pseudo} onChange={this.handleInputChange} />
           <br/>
-          <input type="submit" value="Connect"/>
+          <TextField name="password" type="password" required id="standard-required" label="Password" onChange={this.handleInputChange} />
+          <br/><br/>
+          <Button type="submit" variant="contained" color="primary">
+            Sign in
+          </Button>
         </form>
       </div>
     );
