@@ -1,25 +1,37 @@
 // Component to register a new user
 
-import React from 'react';
+import React, { useState } from 'react';
 import API from '../API';
-// TODO: import style and add className="RegistrationFrom" to the global div
-// Add some text to display if the creation succeeded or failed
+import TextField from '@material-ui/core/TextField';
+import { Button } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/core/styles';
+import theme from '../styles/theme';
 
-const RegistrationForm = () => (
-    <div>
-        <form onSubmit={ () => {
-            API.post('users', { name: this.refs.name, pseudo: this.refs.pseudo })
-            .then(
-                ok => {}, // TODO: display a message with the Snackbar of Material UI
-                err => {} // TODO: display an error
-            )
-        }}>
-            Name: <input type="text" placeholder="John Smith" name="name" ref="name" /> <br />
-            Pseudo: <input type="text" placeholder="xXDarkRaptorKillerXx" name="pseudo" ref="pseudo" /> <br />
-            Password: <input type="password" name="password" ref="password" /> <br />
-            <input type="submit" value="Register" />
-        </form>
-    </div>
-);
+const RegistrationForm = () => {
+    // state
+    const [name, setName] = useState(0);
+    const [pseudo, setPseudo] = useState(1);
+    const [password, setPassword] = useState(2);
+    const [confirmPassword, setConfirmPassword] = useState(3);
+
+    return (
+        <ThemeProvider theme={theme} >
+            <form onSubmit={ (e) => {
+                e.preventDefault();
+                API.post('users', { name: name, pseudo: pseudo })
+                .then(
+                    ok => {}, // TODO: display a message with the Snackbar of Material UI
+                    err => {} // TODO: display an error
+                )
+            }}>
+                <TextField id="name" variant={theme.props.variant} label="Name" required onChange={(e)=>{setName(e.target.value);}} />  <br />
+                <TextField id="pseudo" variant={theme.props.variant} label="Pseudo" requiredonChange={(e)=>{setPseudo(e.target.value);}} />  <br />
+                <TextField id="password" variant={theme.props.variant} label="Password" type="password" required onChange={(e)=>{setPassword(e.target.value);}} />  <br />
+                <TextField id="confirmPassword" variant={theme.props.variant} label="Confirm password" type="password" required onChange={(e)=>{setConfirmPassword(e.target.value);}} />  <br />
+                <Button variant={theme.props.variant} color="primary" type="submit">Register</Button>
+            </form>
+        </ThemeProvider>
+    );
+};
 
 export default RegistrationForm;
