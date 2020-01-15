@@ -1,13 +1,11 @@
 import React from 'react';
 import '../styles/App.css';
-import ConnectionPage from '../pages/ConnectionPage'
+import AppRouter from './AppRouter';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <ConnectionPage/>
-      </header>
+       <AppRouter />
     </div>
   );
 }
