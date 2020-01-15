@@ -30,7 +30,7 @@ class Connect extends React.Component {
   }
 
   handleSubmit(e){
-    axios.post('api/v1/connect', this.state.pseudo).then(
+    axios.post('api/v1/user/signin', {"pseudo": this.state.pseudo, "password": this.state.password}).then(
       res => { 
         console.log(this.state.pseudo + " is connected.");
         return (
