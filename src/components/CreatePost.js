@@ -12,7 +12,9 @@ class CreatePost extends React.Component {
       description: "",
       author: (props.user ? props.user : ""),
       successAlert: false,
-      errorAlert: false
+      errorAlert: false,
+      image: "",
+      imageURL: ""
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -29,10 +31,11 @@ class CreatePost extends React.Component {
   }
 
   handleSubmit(e){
-    let req = {
-      description: this.state.description,
-      author: this.state.author
-    };
+    let req = new FormData();
+    req.append("description", this.state.description);
+    req.append("author", this.state.author)
+    req.append("photo", this.state.image);
+
     axios.post('api/v1/posts', req).then(
       res => { 
         this.setState({successAlert: true});
@@ -43,6 +46,13 @@ class CreatePost extends React.Component {
       }
     );
     e.preventDefault();
+  }
+
+  uploadImage(e){
+    this.setState({
+      imageURL: URL.createObjectURL(e.target.files[0]),
+      image: e.target.files[0]
+    });
   }
 
   render() {
@@ -60,11 +70,13 @@ class CreatePost extends React.Component {
           </Alert>
         </Snackbar>
         <form onSubmit={(e) => this.handleSubmit(e)}>
-        <TextField multiline rows="5" name="description" required id="standard-required" label="Description" defaultValue={this.state.description} onChange={this.handleInputChange} />
-        <br/> <br/>
-        <Button type="submit" variant="contained" color="primary">
-          Post
-        </Button>
+          <input type="file" onChange={(e) => this.uploadImage(e)}/>
+          <img src={this.state.imageURL}/>
+          <TextField multiline rows="5" name="description" required id="standard-required" label="Description" defaultValue={this.state.description} onChange={this.handleInputChange} />
+          <br/> <br/>
+          <Button type="submit" variant="contained" color="primary">
+            Post
+          </Button>
         </form>
       </div>
     );
