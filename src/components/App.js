@@ -1,13 +1,12 @@
 import React from 'react';
-import '../styles/App.css';
-import AppRouter from './AppRouter';
+import { ThemeProvider } from '@material-ui/core';
+import AppNavBar from './AppNavBar';
+import theme from '../styles/theme';
 
-function App() {
-  return (
-    <div className="App">
-       <AppRouter />
-    </div>
-  );
-}
+const App = () => (
+    <ThemeProvider theme={theme}>
+        <AppNavBar />
+    </ThemeProvider>
+);
 
 export default App;
