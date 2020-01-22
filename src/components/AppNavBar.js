@@ -10,6 +10,7 @@ import theme from '../styles/theme';
 
 /**
  * TODOs:
+ * * Close the drawer when a menu is clicked
  * * Handle connection (login button)
  * * Hide useless item in the drawer when not connected
  * * Display correct pages in the Routes
@@ -54,19 +55,19 @@ const AppNavBar = () => {
 
             <Drawer open={drawerOpen} onClose={ toggleDrawer(false) }>
                 <List>
-                    <Link to="/">
+                    <Link to="/" onClick={toggleDrawer(false)}>
                         <ListItem button key="home" className={classes.drawerButton}>
                             <ListItemIcon><Home /></ListItemIcon>
                             <ListItemText primary="Home" />
                         </ListItem>
                     </Link>
-                    <Link to="/profile">
+                    <Link to="/profile" onClick={toggleDrawer(false)}>
                         <ListItem button key="profile" className={classes.drawerButton}>
                             <ListItemIcon><AccountCircle /></ListItemIcon>
                             <ListItemText primary="Profile" />
                         </ListItem>
                     </Link>
-                    <Link to="/connect">
+                    <Link to="/connect" onClick={toggleDrawer(false)}>
                         <ListItem button key="connect" className={classes.drawerButton}>
                             <ListItemIcon><Fingerprint /></ListItemIcon>
                             <ListItemText primary="Login" />
