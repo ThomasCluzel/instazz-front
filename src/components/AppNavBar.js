@@ -10,10 +10,9 @@ import theme from '../styles/theme';
 
 /**
  * TODOs:
- * * Close the drawer when a menu is clicked
- * * Handle connection (login button)
- * * Hide useless item in the drawer when not connected
- * * Display correct pages in the Routes
+ * - Handle connection (login button)
+ *   - Hide useless item in the drawer when not connected
+ * - Display correct pages in the Routes (maybe display only one component with different props)
  */
 
 // NavBar style
