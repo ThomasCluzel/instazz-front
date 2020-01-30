@@ -23,10 +23,10 @@ let theme = createMuiTheme({
             main: '#43a047'
         },
         textPrimary: {
-            main: '#eeeeee'
+            main: '#212121'
         },
         textSecondary: {
-            main: '#aaaaaa'
+            main: '#757575'
         },
     },
     status: {
