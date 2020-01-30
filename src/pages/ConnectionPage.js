@@ -1,16 +1,12 @@
 import React from 'react';
-import Connect from "../components/Connect"
-import Box from "@material-ui/core/Box"
+import { Typography } from "@material-ui/core";
+import Connect from "../components/Connect";
 
-function ConnectionPage() {
-    return (
-        <div>
-            <h2>Connection: </h2>
-            <Box borderColor="black" borderRadius={10}>
-                <Connect/>
-            </Box>
-        </div>
-    );
-}
+const ConnectionPage = () => (
+    <div style={ {textAlign: "center"} }>
+        <Typography variant="h4">Connection</Typography>
+        <Connect/>
+    </div>
+);
 
 export default ConnectionPage;
