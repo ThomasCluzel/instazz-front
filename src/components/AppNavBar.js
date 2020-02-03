@@ -102,6 +102,7 @@ const AppNavBar = () => {
                 <Route path="/register"><RegistrationForm /></Route>
                 <Route path="/profile"><CreatePost /></Route>
                 <Route path="/"><PostList /></Route>
+
             </Switch>
         </BrowserRouter>
     );

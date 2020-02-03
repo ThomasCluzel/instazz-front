@@ -1,9 +1,9 @@
 import React from 'react';
-import axios from 'axios';
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import API from "../API"
 
 class CreatePost extends React.Component {
   constructor(props) {
@@ -12,7 +12,10 @@ class CreatePost extends React.Component {
       description: "",
       author: (props.user ? props.user : ""),
       successAlert: false,
-      errorAlert: false
+      errorAlert: false,
+      image: "",
+      imageURL: "",
+      errMsg: ""
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -29,20 +32,29 @@ class CreatePost extends React.Component {
   }
 
   handleSubmit(e){
-    let req = {
-      description: this.state.description,
-      author: this.state.author
-    };
-    axios.post('api/v1/posts', req).then(
+    let req = new FormData();
+    req.append("description", this.state.description);
+    req.append("author", this.state.author)
+    req.append("imageData", this.state.image);
+
+    API.post('posts', req).then(
       res => { 
         this.setState({successAlert: true});
       },
       err => { 
         console.error("Error: " + err);
+        this.setState({errMsg: ""+err});
         this.setState({errorAlert: true});
       }
     );
     e.preventDefault();
+  }
+
+  uploadImage(e){
+    this.setState({
+      imageURL: URL.createObjectURL(e.target.files[0]),
+      image: e.target.files[0]
+    });
   }
 
   render() {
@@ -51,7 +63,7 @@ class CreatePost extends React.Component {
         <h2>Write a post :</h2>
         <Snackbar open={this.state.errorAlert}>
           <Alert severity="error">
-            <p>Error while posting your post</p>
+            <p>Error while posting your post : {this.state.errMsg}</p>
           </Alert>
         </Snackbar>
         <Snackbar open={this.state.successAlert}>
@@ -60,11 +72,14 @@ class CreatePost extends React.Component {
           </Alert>
         </Snackbar>
         <form onSubmit={(e) => this.handleSubmit(e)}>
-        <TextField multiline rows="5" name="description" required id="standard-required" label="Description" defaultValue={this.state.description} onChange={this.handleInputChange} />
-        <br/> <br/>
-        <Button type="submit" variant="contained" color="primary">
-          Post
-        </Button>
+          <input type="file" onChange={(e) => this.uploadImage(e)}/>
+          <img src={this.state.imageURL} alt=""/>
+          <br/>
+          <TextField multiline rows="5" name="description" required id="standard-required" label="Description" defaultValue={this.state.description} onChange={this.handleInputChange} />
+          <br/> <br/>
+          <Button type="submit" variant="contained" color="primary">
+            Post
+          </Button>
         </form>
       </div>
     );

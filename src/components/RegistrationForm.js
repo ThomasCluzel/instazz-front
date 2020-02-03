@@ -28,7 +28,7 @@ const RegistrationForm = () => {
         .then(
             ok => { console.log('ok'); }, // TODO: go to the home page
             err => {
-                setErrorMsg(err);
+                setErrorMsg(err+"");
                 setAlertShown(true);
             }
         )
