@@ -1,9 +1,9 @@
 import React from 'react';
-import axios from 'axios';
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import API from "../API"
 
 class CreatePost extends React.Component {
   constructor(props) {
@@ -37,7 +37,7 @@ class CreatePost extends React.Component {
     req.append("author", this.state.author)
     req.append("imageData", this.state.image);
 
-    axios.post('api/v1/posts', req).then(
+    API.post('posts', req).then(
       res => { 
         this.setState({successAlert: true});
       },
@@ -73,7 +73,7 @@ class CreatePost extends React.Component {
         </Snackbar>
         <form onSubmit={(e) => this.handleSubmit(e)}>
           <input type="file" onChange={(e) => this.uploadImage(e)}/>
-          <img src={this.state.imageURL}/>
+          <img src={this.state.imageURL} alt=""/>
           <br/>
           <TextField multiline rows="5" name="description" required id="standard-required" label="Description" defaultValue={this.state.description} onChange={this.handleInputChange} />
           <br/> <br/>
