@@ -87,7 +87,7 @@ const AppNavBar = () => {
             </Drawer>
 
             <Switch>
-                <Route path="/connect"><ConnectionPage /></Route>
+                <Route path="/connect"><ConnectionPage connectedState={[connected, setConnected]} /></Route>
                 <Route path="/register"><RegistrationForm /></Route>
                 <Route path="/profile"><CreatePost /></Route>
                 <Route path="/"><PostList /></Route>
