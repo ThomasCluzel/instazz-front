@@ -11,8 +11,7 @@ import PostList from './PostList';
 
 /**
  * TODOs:
- * - Handle connection (login button)
- *   - Hide useless item in the drawer when not connected
+ * - Hide useless item in the drawer when not connected
  * - Display correct pages in the Routes (maybe display only one component with different props)
  *   - Connection : OK
  *   - Registration
@@ -33,11 +32,23 @@ const useStyle = makeStyles(theme => ({
     }
 }));
 
+// Event handlers
+const logInOutButton = (connected, setConnected) => () => {
+    // if the user is connected, we must disconnect him/her
+    if(connected) {
+        localStorage.removeItem("token"); // clear JWT
+        setConnected(false); // clear app state
+    }
+    else { // otherwise, we redirect him/her to the connection page
+        window.location = "/connect";
+    }
+};
+
 const AppNavBar = () => {
     const classes = useStyle();
 
     const [ drawerOpen, setDrawerOpen ] = useState(false);
-    const [ connected, setConnected ] = useState(false);
+    const [ connected, setConnected ] = useState(localStorage.getItem("token") !== null);
 
     const toggleDrawer = (newState) => () => setDrawerOpen(newState);
 
@@ -49,11 +60,11 @@ const AppNavBar = () => {
                         <MenuIcon className={classes.toolbarButton} />
                     </IconButton>
                     <h1>InstaZZ</h1>
-                    <Link to={ connected ? "/" : "/connect"}>
-                        <Button variant={theme.props.variant} className={classes.toolbarButton} >
-                            { (connected) ? "Log out" : "Login" }
-                        </Button>
-                    </Link>
+                    <Button variant={theme.props.variant}
+                            className={classes.toolbarButton}
+                            onClick={logInOutButton(connected, setConnected)} >
+                        { (connected) ? "Log out" : "Login" }
+                    </Button>
                 </Toolbar>
             </AppBar>
 
