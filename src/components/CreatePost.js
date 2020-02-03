@@ -14,7 +14,8 @@ class CreatePost extends React.Component {
       successAlert: false,
       errorAlert: false,
       image: "",
-      imageURL: ""
+      imageURL: "",
+      errMsg: ""
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -34,7 +35,7 @@ class CreatePost extends React.Component {
     let req = new FormData();
     req.append("description", this.state.description);
     req.append("author", this.state.author)
-    req.append("photo", this.state.image);
+    req.append("imageData", this.state.image);
 
     axios.post('api/v1/posts', req).then(
       res => { 
@@ -42,6 +43,7 @@ class CreatePost extends React.Component {
       },
       err => { 
         console.error("Error: " + err);
+        this.setState({errMsg: ""+err});
         this.setState({errorAlert: true});
       }
     );
@@ -61,7 +63,7 @@ class CreatePost extends React.Component {
         <h2>Write a post :</h2>
         <Snackbar open={this.state.errorAlert}>
           <Alert severity="error">
-            <p>Error while posting your post</p>
+            <p>Error while posting your post : {this.state.errMsg}</p>
           </Alert>
         </Snackbar>
         <Snackbar open={this.state.successAlert}>
@@ -72,6 +74,7 @@ class CreatePost extends React.Component {
         <form onSubmit={(e) => this.handleSubmit(e)}>
           <input type="file" onChange={(e) => this.uploadImage(e)}/>
           <img src={this.state.imageURL}/>
+          <br/>
           <TextField multiline rows="5" name="description" required id="standard-required" label="Description" defaultValue={this.state.description} onChange={this.handleInputChange} />
           <br/> <br/>
           <Button type="submit" variant="contained" color="primary">
