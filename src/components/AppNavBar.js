@@ -11,8 +11,7 @@ import PostList from './PostList';
 
 /**
  * TODOs:
- * - Hide useless item in the drawer when not connected
- * - Display correct pages in the Routes (maybe display only one component with different props)
+ * - Display correct pages in the Routes
  *   - Connection : OK
  *   - Registration
  *   - Profile
@@ -76,24 +75,39 @@ const AppNavBar = () => {
                             <ListItemText primary="Home" />
                         </ListItem>
                     </Link>
-                    <Link to="/profile" onClick={toggleDrawer(false)}>
-                        <ListItem button key="profile" className={classes.drawerButton}>
-                            <ListItemIcon><AccountCircleOutlined color="primary" /></ListItemIcon>
-                            <ListItemText primary="Profile" />
-                        </ListItem>
-                    </Link>
-                    <Link to="/connect" onClick={toggleDrawer(false)}>
-                        <ListItem button key="connect" className={classes.drawerButton}>
-                            <ListItemIcon><FingerprintOutlined color="primary" /></ListItemIcon>
-                            <ListItemText primary="Login" />
-                        </ListItem>
-                    </Link>
-                    <Link to="/register" onClick={toggleDrawer(false)}>
-                        <ListItem button key="register" className={classes.drawerButton}>
-                            <ListItemIcon><BorderColorOutlined color="primary" /></ListItemIcon>
-                            <ListItemText primary="Register" />
-                        </ListItem>
-                    </Link>
+                    {connected ? (
+                        <Link to="/profile" onClick={toggleDrawer(false)}>
+                            <ListItem button key="profile" className={classes.drawerButton}>
+                                <ListItemIcon><AccountCircleOutlined color="primary" /></ListItemIcon>
+                                <ListItemText primary="Profile" />
+                            </ListItem>
+                        </Link>
+                    ) : (
+                        <span />
+                    )
+                    }
+                    {!connected ? (
+                        <Link to="/connect" onClick={toggleDrawer(false)}>
+                            <ListItem button key="connect" className={classes.drawerButton}>
+                                <ListItemIcon><FingerprintOutlined color="primary" /></ListItemIcon>
+                                <ListItemText primary="Login" />
+                            </ListItem>
+                        </Link>
+                    ) : (
+                        <span />
+                    )
+                    }
+                    {!connected ? (
+                        <Link to="/register" onClick={toggleDrawer(false)}>
+                            <ListItem button key="register" className={classes.drawerButton}>
+                                <ListItemIcon><BorderColorOutlined color="primary" /></ListItemIcon>
+                                <ListItemText primary="Register" />
+                            </ListItem>
+                        </Link>
+                    ) : (
+                        <span />
+                    )
+                    }
                 </List>
             </Drawer>
 
