@@ -1,16 +1,21 @@
 import React from 'react';
-import Connect from "../components/Connect"
-import Box from "@material-ui/core/Box"
+import { Typography } from "@material-ui/core";
+import Connect from "../components/Connect";
 
-function ConnectionPage() {
-    return (
-        <div>
-            <h2>Connection: </h2>
-            <Box borderColor="black" borderRadius={10}>
-                <Connect/>
-            </Box>
-        </div>
-    );
-}
+/**
+ * ConnectionPage is a component to display the connect component and
+ * ask the user for his/her credentials.
+ * 
+ * @param {*} props is { connectedState: [connected, setConnected] }
+ */
+const ConnectionPage = (props) => (
+    <div style={ {textAlign: "center"} }>
+        <Typography variant="h4">Connection</Typography>
+        <Connect connectedState={props.connectedState} />
+        <Typography color="textPrimary">
+            Not part of InstaZZ yet? <a href="/register">Create an account</a>, it's free.
+        </Typography>
+    </div>
+);
 
 export default ConnectionPage;

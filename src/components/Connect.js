@@ -1,71 +1,79 @@
-import React from 'react';
-import axios from 'axios';
-import { Redirect } from 'react-router-dom';
-import Snackbar from "@material-ui/core/Snackbar";
-import TextField from '@material-ui/core/TextField';
-import Button from "@material-ui/core/Button";
-import Alert from "@material-ui/lab/Alert";
+import React, { useState } from 'react';
+import API from '../API';
+import { Snackbar, TextField, Button, makeStyles } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
+import theme from '../styles/theme';
 
-class Connect extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      pseudo: "",
-      password: "",
-      errorAlert: false,
+// Style of the form to login
+const useStyle = makeStyles(() => ({
+    form: {
+        padding: "2%",
+        height: "150%",
+        display: "flex",
+        flexFlow: "column nowrap",
+        justifyContent: "space-around",
+        alignItems: "center"
+    }
+}));
+
+/**
+ * The form to fill out for the user to log in.
+ * 
+ * @param {*} props is { connectedState: [connected, setConnected] }
+ */
+const Connect = (props) => {
+    const classes = useStyle();
+
+    // State of the component
+    const [ pseudo, setPseudo ] = useState("");
+    const [ password, setPassword ] = useState("");
+    const [ errorAlert, setErrorAlert ] = useState(false);
+    const [ errorMsg, setErrorMsg ] = useState("");
+    const [ connected, setConnected ] = props.connectedState;
+    
+    // If the user is already connected we redirect him/her to the homepage
+    if(connected)
+        window.location = "/";
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // ask the API to log the user in
+        API.post('user/signin', { "pseudo": pseudo, "password": password }).then(
+            res => { // login success
+                console.log(pseudo + " is now connected.");
+                localStorage.setItem("token", res.data.token); // store the JWT
+                setConnected(true); // change app state
+                window.location = "/"; // redirect to home page
+            },
+            err => { // login failure
+                console.log("Error from the API: " + err);
+                setErrorMsg("" + err); // show the problem
+                setErrorAlert(true);
+            }
+        );
     };
 
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-
-    this.setState({
-      [name]: value
-    });
-  }
-
-  handleSubmit(e){
-    axios.post('api/v1/user/signin', {"pseudo": this.state.pseudo, "password": this.state.password}).then(
-      res => { 
-        console.log(this.state.pseudo + " is connected.");
-        return (
-            <Redirect to='api/v1/posts'/>
-        );
-      },
-      err => { 
-        console.log("Error: " + err);
-        this.setState({errorAlert: true});
-        e.preventDefault();
-      }
-    );
-
-  }
-
-  render() {
     return (
-      <div>
-        <Snackbar open={this.state.errorAlert}>
-          <Alert severity="error">
-            <p>Wrong pseudo or password</p>
-          </Alert>
-        </Snackbar>
-        <form onSubmit={(e) => this.handleSubmit(e)}>
-          <TextField name="pseudo" required id="standard-required" label="Pseudo" defaultValue={this.state.pseudo} onChange={this.handleInputChange} />
-          <br/>
-          <TextField name="password" type="password" required id="standard-required" label="Password" onChange={this.handleInputChange} />
-          <br/><br/>
-          <Button type="submit" variant="contained" color="primary">
-            Sign in
-          </Button>
-        </form>
-      </div>
+        <div>
+            <Snackbar open={errorAlert} autoHideDuration={5000} onClose={() => setErrorAlert(false)}>
+                <Alert severity="error">
+                    {errorMsg}
+                </Alert>
+            </Snackbar>
+
+            <form onSubmit={handleSubmit} className={classes.form}>
+                <TextField name="pseudo" required label="Pseudo" variant={theme.props.variant}
+                    defaultValue={pseudo} onChange={ (e) => setPseudo(e.target.value) } />
+                <br />
+                <TextField name="password" required label="Password" variant={theme.props.variant}
+                    type="password" onChange={ (e) => setPassword(e.target.value) } />
+                <br />
+                <Button type="submit" variant={theme.props.variant} color="primary">
+                    Log in
+                </Button>
+            </form>
+        </div>
     );
-  }
-}
+};
 
 export default Connect;
