@@ -31,25 +31,24 @@ const useStyle = makeStyles(theme => ({
     }
 }));
 
-// Event handlers
-const logInOutButton = (connected, setConnected) => () => {
-    // if the user is connected, we must disconnect him/her
-    if(connected) {
-        localStorage.removeItem("token"); // clear JWT
-        setConnected(false); // clear app state
-    }
-    else { // otherwise, we redirect him/her to the connection page
-        window.location = "/connect";
-    }
-};
-
 const AppNavBar = () => {
     const classes = useStyle();
 
     const [ drawerOpen, setDrawerOpen ] = useState(false);
     const [ connected, setConnected ] = useState(localStorage.getItem("token") !== null);
 
+    // Event handlers
     const toggleDrawer = (newState) => () => setDrawerOpen(newState);
+    const logInOutButton = () => {
+        // if the user is connected, we must disconnect him/her
+        if(connected) {
+            localStorage.removeItem("token"); // clear JWT
+            setConnected(false); // clear app state
+        }
+        else { // otherwise, we redirect him/her to the connection page
+            window.location = "/connect";
+        }
+    };
 
     return (
         <BrowserRouter>
@@ -61,7 +60,7 @@ const AppNavBar = () => {
                     <h1>InstaZZ</h1>
                     <Button variant={theme.props.variant}
                             className={classes.toolbarButton}
-                            onClick={logInOutButton(connected, setConnected)} >
+                            onClick={logInOutButton} >
                         { (connected) ? "Log out" : "Login" }
                     </Button>
                 </Toolbar>
@@ -75,38 +74,29 @@ const AppNavBar = () => {
                             <ListItemText primary="Home" />
                         </ListItem>
                     </Link>
-                    {connected ? (
+                    { connected &&
                         <Link to="/profile" onClick={toggleDrawer(false)}>
                             <ListItem button key="profile" className={classes.drawerButton}>
                                 <ListItemIcon><AccountCircleOutlined color="primary" /></ListItemIcon>
                                 <ListItemText primary="Profile" />
                             </ListItem>
                         </Link>
-                    ) : (
-                        <span />
-                    )
                     }
-                    {!connected ? (
+                    { !connected &&
                         <Link to="/connect" onClick={toggleDrawer(false)}>
                             <ListItem button key="connect" className={classes.drawerButton}>
                                 <ListItemIcon><FingerprintOutlined color="primary" /></ListItemIcon>
                                 <ListItemText primary="Login" />
                             </ListItem>
                         </Link>
-                    ) : (
-                        <span />
-                    )
                     }
-                    {!connected ? (
+                    { !connected &&
                         <Link to="/register" onClick={toggleDrawer(false)}>
                             <ListItem button key="register" className={classes.drawerButton}>
                                 <ListItemIcon><BorderColorOutlined color="primary" /></ListItemIcon>
                                 <ListItemText primary="Register" />
                             </ListItem>
                         </Link>
-                    ) : (
-                        <span />
-                    )
                     }
                 </List>
             </Drawer>
