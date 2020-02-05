@@ -4,5 +4,14 @@ This project is the *frontend* of the InstaZZ app of the course ZZ3-javascript-e
 
 It was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Environment
+
+This project uses `dotenv` to set the API_URL.
+For the server to work, it needs a `.env` file at the root of the project
+containing:
+```
+API_HOST="domain.name:port"
+```
+
 --------------------------------------------------------------------------------
 Authors: Bruno Jousse & Thomas Cluzel
