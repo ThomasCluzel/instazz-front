@@ -33,7 +33,8 @@ let theme = createMuiTheme({
         danger: 'red',
     },
     props: {
-        variant: 'outlined'
+        variant: 'outlined',
+        pageTitleVariant: 'h4'
     }
 });
 theme = responsiveFontSizes(theme);

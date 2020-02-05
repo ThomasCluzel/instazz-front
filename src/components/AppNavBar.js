@@ -3,17 +3,17 @@ import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import { AppBar, Toolbar, IconButton, Button, makeStyles, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { HomeOutlined, AccountCircleOutlined, FingerprintOutlined, BorderColorOutlined } from '@material-ui/icons';
 import MenuIcon from '@material-ui/icons/Menu';
-import RegistrationForm from './RegistrationForm';
 import CreatePost from './CreatePost';
 import theme from '../styles/theme';
 import ConnectionPage from '../pages/ConnectionPage';
 import PostList from './PostList';
+import RegistrationPage from '../pages/RegistrationPage';
 
 /**
  * TODOs:
  * - Display correct pages in the Routes
  *   - Connection : OK
- *   - Registration
+ *   - Registration : OK
  *   - Profile
  *   - Home page
  */
@@ -103,7 +103,7 @@ const AppNavBar = () => {
 
             <Switch>
                 <Route path="/connect"><ConnectionPage connectedState={[connected, setConnected]} /></Route>
-                <Route path="/register"><RegistrationForm /></Route>
+                <Route path="/register"><RegistrationPage /></Route>
                 <Route path="/profile"><CreatePost /></Route>
                 <Route path="/"><PostList /></Route>
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography } from "@material-ui/core";
 import Connect from "../components/Connect";
+import theme from '../styles/theme';
 
 /**
  * ConnectionPage is a component to display the connect component and
@@ -10,7 +11,7 @@ import Connect from "../components/Connect";
  */
 const ConnectionPage = (props) => (
     <div style={ {textAlign: "center"} }>
-        <Typography variant="h4">Connection</Typography>
+        <Typography variant={theme.props.pageTitleVariant}>Connection</Typography>
         <Connect connectedState={props.connectedState} />
         <Typography color="textPrimary">
             Not part of InstaZZ yet? <a href="/register">Create an account</a>, it's free.

@@ -1,13 +1,17 @@
-// Component to register a new user
-
 import React, { useState } from 'react';
 import API from '../API';
 import TextField from '@material-ui/core/TextField';
 import { Button, Snackbar } from '@material-ui/core';
 import Alert from "@material-ui/lab/Alert";
 import theme from '../styles/theme';
+import { useFormStyle} from '../styles/styles';
 
+/**
+ * Component to register a new user
+ */
 const RegistrationForm = () => {
+    const classes = useFormStyle();
+
     // state
     const [name, setName] = useState('');
     const [pseudo, setPseudo] = useState('');
@@ -26,7 +30,10 @@ const RegistrationForm = () => {
         }
         API.post('users', { name: name, pseudo: pseudo, password: password })
         .then(
-            ok => { console.log('ok'); }, // TODO: go to the home page
+            ok => {
+                 // TODO: Store the JWT
+                window.location = '/';
+            },
             err => {
                 setErrorMsg(err+"");
                 setAlertShown(true);
@@ -38,7 +45,7 @@ const RegistrationForm = () => {
 
     return (
         <div>
-            <form onSubmit={submitForm}>
+            <form onSubmit={submitForm} className={classes.form} >
                 <TextField id="name" variant={theme.props.variant} label="Name"
                     required onChange={ (e) => { setName(e.target.value); } } />  <br />
                 <TextField id="pseudo" variant={theme.props.variant} label="Pseudo"

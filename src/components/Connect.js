@@ -1,20 +1,9 @@
 import React, { useState } from 'react';
 import API from '../API';
-import { Snackbar, TextField, Button, makeStyles } from "@material-ui/core";
+import { Snackbar, TextField, Button } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import theme from '../styles/theme';
-
-// Style of the form to login
-const useStyle = makeStyles(() => ({
-    form: {
-        padding: "2%",
-        height: "150%",
-        display: "flex",
-        flexFlow: "column nowrap",
-        justifyContent: "space-around",
-        alignItems: "center"
-    }
-}));
+import { useFormStyle } from '../styles/styles';
 
 /**
  * The form to fill out for the user to log in.
@@ -22,7 +11,7 @@ const useStyle = makeStyles(() => ({
  * @param {*} props is { connectedState: [connected, setConnected] }
  */
 const Connect = (props) => {
-    const classes = useStyle();
+    const classes = useFormStyle();
 
     // State of the component
     const [ pseudo, setPseudo ] = useState("");
