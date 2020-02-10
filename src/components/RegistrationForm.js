@@ -1,24 +1,28 @@
 import React, { useState } from 'react';
 import API from '../API';
 import TextField from '@material-ui/core/TextField';
-import { Button, Snackbar } from '@material-ui/core';
+import { Button, Snackbar, CircularProgress } from '@material-ui/core';
 import Alert from "@material-ui/lab/Alert";
 import theme from '../styles/theme';
 import { useFormStyle} from '../styles/styles';
 
 /**
  * Component to register a new user
+ * 
+ * @param {*} props is { stateUser: [ user, setUser ] }
  */
-const RegistrationForm = () => {
+const RegistrationForm = (props) => {
     const classes = useFormStyle();
 
     // state
-    const [name, setName] = useState('');
-    const [pseudo, setPseudo] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [alertShown, setAlertShown] = React.useState(false);
-    const [errorMsg, setErrorMsg] = React.useState('');
+    const [ name, setName ] = useState('');
+    const [ pseudo, setPseudo ] = useState('');
+    const [ password, setPassword ] = useState('');
+    const [ confirmPassword, setConfirmPassword ] = useState('');
+    const [ alertShown, setAlertShown ] = useState(false);
+    const [ errorMsg, setErrorMsg ] = useState('');
+    const [ showProgressBar, setShowProgressBar ] = useState(false);
+    const setUser = props.stateUser.setUser; // props.stateUser === [ user, setUser ]
 
     const submitForm = (e) => {
         e.preventDefault();
@@ -28,15 +32,22 @@ const RegistrationForm = () => {
             setAlertShown(true);
             return;
         }
+        setShowProgressBar(true);
         API.post('users', { name: name, pseudo: pseudo, password: password })
         .then(
-            ok => {
-                 // TODO: Store the JWT
+            res => {
+                setUser({
+                    name: res.data.name,
+                    pseudo: res.data.pseudo,
+                    role: res.data.role
+                });
+                window.localStorage.setItem("token", res.data.token);
                 window.location = '/';
             },
             err => {
                 setErrorMsg(err+"");
                 setAlertShown(true);
+                setShowProgressBar(false);
             }
         )
     }
@@ -56,6 +67,11 @@ const RegistrationForm = () => {
                     required onChange={ (e) => { setConfirmPassword(e.target.value); } } />  <br />
                 <Button variant={theme.props.variant} color="primary" type="submit">Register</Button>
             </form>
+
+            <div style={{justifyContent: "center", visibility: showProgressBar ? "" : "hidden"}}>
+                <CircularProgress color="secondary" />
+            </div>
+            
             <Snackbar open={alertShown} autoHideDuration={5000} onClose={handleAlertClose}>
                 <Alert severity="error">{errorMsg}</Alert>
             </Snackbar>
