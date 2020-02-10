@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import API from '../API';
-import { Snackbar, TextField, Button, CircularProgress } from "@material-ui/core";
+import { Snackbar, TextField, Button } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import theme from '../styles/theme';
 import { useFormStyle } from '../styles/styles';
+import InfiniteProgressBar from './InfiniteProgressBar';
 
 /**
  * The form to fill out for the user to log in.
@@ -62,9 +63,7 @@ const Connect = (props) => {
                 </Button>
             </form>
 
-            <div style={{justifyContent: "center", visibility: showProgressBar ? "" : "hidden"}}>
-                <CircularProgress color="secondary" />
-            </div>
+            <InfiniteProgressBar isVisible={showProgressBar} />
 
             <Snackbar open={errorAlert} autoHideDuration={5000} onClose={() => setErrorAlert(false)}>
                 <Alert severity="error">

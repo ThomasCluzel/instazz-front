@@ -6,8 +6,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import CreatePost from './CreatePost';
 import theme from '../styles/theme';
 import ConnectionPage from '../pages/ConnectionPage';
-import PostList from './PostList';
 import RegistrationPage from '../pages/RegistrationPage';
+import HomePage from '../pages/HomePage';
 
 /**
  * TODOs:
@@ -105,7 +105,7 @@ const AppNavBar = () => {
                 <Route path="/connect"><ConnectionPage stateUser={[user, setUser]} /></Route>
                 <Route path="/register"><RegistrationPage stateUser={[user, setUser]} /></Route>
                 <Route path="/profile"><CreatePost /></Route>
-                <Route path="/"><PostList /></Route>
+                <Route path="/"><HomePage /></Route>
 
             </Switch>
         </BrowserRouter>
