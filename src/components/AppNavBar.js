@@ -35,15 +35,15 @@ const AppNavBar = () => {
     const classes = useStyle();
 
     const [ drawerOpen, setDrawerOpen ] = useState(false);
-    const [ connected, setConnected ] = useState(localStorage.getItem("token") !== null);
+    const [ user, setUser ] = useState(null);
 
     // Event handlers
     const toggleDrawer = (newState) => () => setDrawerOpen(newState);
     const logInOutButton = () => {
         // if the user is connected, we must disconnect him/her
-        if(connected) {
+        if(user) {
             localStorage.removeItem("token"); // clear JWT
-            setConnected(false); // clear app state
+            setUser(null); // clear app state
         }
         else { // otherwise, we redirect him/her to the connection page
             window.location = "/connect";
@@ -61,7 +61,7 @@ const AppNavBar = () => {
                     <Button variant={theme.props.variant}
                             className={classes.toolbarButton}
                             onClick={logInOutButton} >
-                        { (connected) ? "Log out" : "Login" }
+                        { (user) ? "Log out" : "Login" }
                     </Button>
                 </Toolbar>
             </AppBar>
@@ -74,7 +74,7 @@ const AppNavBar = () => {
                             <ListItemText primary="Home" />
                         </ListItem>
                     </Link>
-                    { connected &&
+                    { user &&
                         <Link to="/profile" onClick={toggleDrawer(false)}>
                             <ListItem button key="profile" className={classes.drawerButton}>
                                 <ListItemIcon><AccountCircleOutlined color="primary" /></ListItemIcon>
@@ -82,7 +82,7 @@ const AppNavBar = () => {
                             </ListItem>
                         </Link>
                     }
-                    { !connected &&
+                    { !user &&
                         <Link to="/connect" onClick={toggleDrawer(false)}>
                             <ListItem button key="connect" className={classes.drawerButton}>
                                 <ListItemIcon><FingerprintOutlined color="primary" /></ListItemIcon>
@@ -90,7 +90,7 @@ const AppNavBar = () => {
                             </ListItem>
                         </Link>
                     }
-                    { !connected &&
+                    { !user &&
                         <Link to="/register" onClick={toggleDrawer(false)}>
                             <ListItem button key="register" className={classes.drawerButton}>
                                 <ListItemIcon><BorderColorOutlined color="primary" /></ListItemIcon>
@@ -102,8 +102,8 @@ const AppNavBar = () => {
             </Drawer>
 
             <Switch>
-                <Route path="/connect"><ConnectionPage connectedState={[connected, setConnected]} /></Route>
-                <Route path="/register"><RegistrationPage /></Route>
+                <Route path="/connect"><ConnectionPage stateUser={[user, setUser]} /></Route>
+                <Route path="/register"><RegistrationPage stateUser={[user, setUser]} /></Route>
                 <Route path="/profile"><CreatePost /></Route>
                 <Route path="/"><PostList /></Route>
 

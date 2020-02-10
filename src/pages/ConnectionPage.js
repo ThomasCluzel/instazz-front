@@ -7,12 +7,12 @@ import theme from '../styles/theme';
  * ConnectionPage is a component to display the connect component and
  * ask the user for his/her credentials.
  * 
- * @param {*} props is { connectedState: [connected, setConnected] }
+ * @param {*} props is { stateUser: [ user, setUser ] }
  */
 const ConnectionPage = (props) => (
     <div style={ {textAlign: "center"} }>
         <Typography variant={theme.props.pageTitleVariant}>Connection</Typography>
-        <Connect connectedState={props.connectedState} />
+        <Connect stateUser={props.stateUser} />
         <Typography color="textPrimary">
             Not part of InstaZZ yet? <a href="/register">Create an account</a>, it's free.
         </Typography>
