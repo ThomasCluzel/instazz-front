@@ -105,8 +105,7 @@ const AppNavBar = () => {
                 <Route path="/connect"><ConnectionPage stateUser={[user, setUser]} /></Route>
                 <Route path="/register"><RegistrationPage stateUser={[user, setUser]} /></Route>
                 <Route path="/profile"><CreatePost /></Route>
-                <Route path="/"><HomePage /></Route>
-
+                <Route path="/"><HomePage stateUser={[user, setUser]} /></Route>
             </Switch>
         </BrowserRouter>
     );
