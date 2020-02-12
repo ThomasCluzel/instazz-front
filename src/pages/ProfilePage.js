@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography } from '@material-ui/core';
 import PostList from '../components/PostList';
 import theme from '../styles/theme';
-
+import CreatePost from '../components/CreatePost';
 
 /**
  * The ProfilePage component is the page that enables the user
@@ -15,7 +15,7 @@ const ProfilePage = (props) => (
         <Typography variant={theme.props.pageTitleVariant}>
             Write a new post
         </Typography>
-        <span>TODO: write post form</span>
+        <CreatePost stateUser={props.stateUser} />
         
         <Typography variant={theme.props.pageTitleVariant}>
             Your last posts

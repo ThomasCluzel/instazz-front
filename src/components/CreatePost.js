@@ -1,10 +1,90 @@
-import React from 'react';
-import Alert from "@material-ui/lab/Alert";
-import Snackbar from "@material-ui/core/Snackbar";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import React, { useState } from 'react';
+import { Snackbar, TextField, Button } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 import API from "../API"
+import theme from '../styles/theme';
 
+/**
+ * TODO:
+ * - Documentation
+ * - Remove old version
+ * - Style CSS (like other forms)
+ * - Test if it works
+ */
+
+/**
+ * TODO
+ * 
+ * @param {} props is { stateUser: [ user, setUser ] } 
+ */
+const CreatePost = (props) => {
+    // style
+    //TODO
+
+    // state
+    const [ description, setDescription ] = useState("");
+    const [ successAlert, setSuccessAlert ] = useState(false);
+    const [ errorAlert, setErrorAlert ] = useState(false);
+    const [ image, setImage ] = useState(null);
+    const [ imageURL, setImageURL ] = useState(null);
+    const [ errMsg, setErrMsg ] = useState("");
+    const user = props.stateUser[0];
+
+    // functions
+    const sendPost = (e) => {
+        e.preventDefault();
+
+        const req = new FormData();
+        req.append("description", description);
+        req.append("author", user._id);
+        req.append("imageData", image);
+
+        API.post('posts', req).then(
+            res => {
+                setSuccessAlert(true);
+            },
+            err => { 
+                console.error("" + err);
+                setErrMsg(""+err);
+                setErrorAlert(true);
+            }
+        );
+    }
+    const uploadImage = (e) => {
+        setImage(e.target.files[0]);
+        setImageURL(URL.createObjectURL(e.target.files[0]));
+    }
+
+    return (
+        <div>
+            <Snackbar open={errorAlert} autoHideDuration={6000} onClose={() => setErrorAlert(false)}>
+                <Alert severity="error">
+                    <p>{errMsg}</p>
+                </Alert>
+            </Snackbar>
+            <Snackbar open={successAlert} autoHideDuration={3000} onClose={() => setSuccessAlert(false)}>
+                <Alert severity="success">
+                    <p>Posted!</p>
+                </Alert>
+            </Snackbar>
+
+            <form onSubmit={sendPost}>
+                <input type="file" onChange={uploadImage} />
+                <img src={imageURL} alt="" />
+                <br />
+                <TextField name="description" required label="Description"
+                    variant={theme.props.variant} multiline rows="5"
+                    defaultValue={description} onChange={(e) => setDescription(e.target.value)} />
+                <br />
+                <Button type="submit" variant={theme.props.variant} color="primary">
+                    Post
+                </Button>
+            </form>
+        </div>
+    );
+};
+
+/*
 class CreatePost extends React.Component {
   constructor(props) {
     super(props);
@@ -85,5 +165,6 @@ class CreatePost extends React.Component {
     );
   }
 }
+*/
 
 export default CreatePost;

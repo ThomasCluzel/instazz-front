@@ -49,7 +49,6 @@ const PostList = (props) => {
         let query = `page=${page}&per_page=${perPage}`;
         if(user) { // if we want only the posts of the currently connected user
             path += "/myposts";
-            query += `&_id=${user._id}`;
         }
         API.get(`${path}?${query}`).then(
             res => {
