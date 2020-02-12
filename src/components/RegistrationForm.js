@@ -40,10 +40,11 @@ const RegistrationForm = (props) => {
                 setUser({
                     name: res.data.name,
                     pseudo: res.data.pseudo,
-                    role: res.data.role
+                    role: res.data.role,
+                    _id: res.data._id
                 });
                 window.localStorage.setItem("token", res.data.token);
-                window.location = '/';
+                this.props.history.push('/');
             },
             err => {
                 setErrorMsg(err+"");

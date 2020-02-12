@@ -5,14 +5,6 @@ import PostListItem from './PostListItem';
 import InfiniteProgressBar from './InfiniteProgressBar';
 import API from '../API';
 
-/**
- * TODOs:
- * - Maybe a props to know what we must fetch (add props)
- *   - all the recent posts
- *   - only the user's posts
- *   - some specific posts
- */
-
 // Constants
 const NUMBER_OF_INITIAL_POST = 12; // load 10 posts at the beginning
 const NUMBER_OF_POST_TO_LOAD = NUMBER_OF_INITIAL_POST / 2; // each time the user reach the end
@@ -36,9 +28,9 @@ const useStyles = makeStyles({
 /**
  * Display a list of posts
  * 
- * @param {*} props is { stateUser: [ user, setUser ] }
+ * @param {*} props is { stateUser: [ user, setUser ] } or {}
  */
-const PostList = () => {
+const PostList = (props) => {
     // style
     const classes = useStyles();
 
@@ -49,10 +41,17 @@ const PostList = () => {
     const [ showProgressBar, setShowProgressBar ] = useState(true);
     const [ alertShown, setAlertShown ] = useState(false);
     const [ errorMsg, setErrorMsg ] = useState('');
+    const user = props.stateUser ? props.stateUser[0] : null;
 
     // functions
     const loadPosts = (page, perPage, showError) => {
-        API.get(`posts?page=${page}&per_page=${perPage}`).then(
+        let path = "posts";
+        let query = `page=${page}&per_page=${perPage}`;
+        if(user) { // if we want only the posts of the currently connected user
+            path += "/myposts";
+            query += `&_id=${user._id}`;
+        }
+        API.get(`${path}?${query}`).then(
             res => {
                 // fetch and append more posts
                 setShowProgressBar(false);
