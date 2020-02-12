@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import API from '../API';
 import TextField from '@material-ui/core/TextField';
-import { Button, Snackbar, CircularProgress } from '@material-ui/core';
+import { Button, Snackbar } from '@material-ui/core';
 import Alert from "@material-ui/lab/Alert";
 import theme from '../styles/theme';
 import { useFormStyle} from '../styles/styles';
+import InfiniteProgressBar from './InfiniteProgressBar';
 
 /**
  * Component to register a new user
@@ -68,9 +69,7 @@ const RegistrationForm = (props) => {
                 <Button variant={theme.props.variant} color="primary" type="submit">Register</Button>
             </form>
 
-            <div style={{justifyContent: "center", visibility: showProgressBar ? "" : "hidden"}}>
-                <CircularProgress color="secondary" />
-            </div>
+            <InfiniteProgressBar isVisible={showProgressBar} />
             
             <Snackbar open={alertShown} autoHideDuration={5000} onClose={handleAlertClose}>
                 <Alert severity="error">{errorMsg}</Alert>
