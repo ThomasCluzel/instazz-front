@@ -15,7 +15,7 @@ import HomePage from '../pages/HomePage';
  *   - Connection : OK
  *   - Registration : OK
  *   - Profile
- *   - Home page
+ *   - Home page : OK
  */
 
 // NavBar style

@@ -7,14 +7,14 @@ import API from '../API';
 
 /**
  * TODOs:
- * - Maybe a props to know if we need to fetch (reason to add props)
+ * - Maybe a props to know what we must fetch (add props)
  *   - all the recent posts
  *   - only the user's posts
  *   - some specific posts
  */
 
 // Constants
-const NUMBER_OF_INITIAL_POST = 10; // load 10 posts at the beginning
+const NUMBER_OF_INITIAL_POST = 12; // load 10 posts at the beginning
 const NUMBER_OF_POST_TO_LOAD = NUMBER_OF_INITIAL_POST / 2; // each time the user reach the end
 
 // Style
@@ -22,6 +22,14 @@ const useStyles = makeStyles({
     center: {
         display: "flex",
         justifyContent: "center"
+    },
+    list: {
+        width: "80%", // let white bands on the sides
+        marginLeft: "10%",
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "space-between"
     }
 });
 
@@ -73,10 +81,10 @@ const PostList = () => {
 
     // event listener
     window.onscroll = function(e) {
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        if (!showProgressBar && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
             // the user has reached the bottom of the page (and read all posts)
-            setCurrentPageOfPosts(currentPageOfPosts + 1);
             setShowProgressBar(true);
+            setCurrentPageOfPosts(currentPageOfPosts + 1);
             loadPosts(currentPageOfPosts, NUMBER_OF_POST_TO_LOAD);
         }
     };
@@ -90,7 +98,7 @@ const PostList = () => {
             { errorFromServer ?
                 <p className={classes.center}>{errorMsg}</p>
             :
-                <List>
+                <List className={classes.list}>
                     { postList && postList.map( post => <PostListItem post={post} key={post._id} />) }
                 </List>
             }
