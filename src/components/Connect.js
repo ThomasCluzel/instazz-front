@@ -3,7 +3,7 @@ import API from '../API';
 import { Snackbar, TextField, Button } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import theme from '../styles/theme';
-import { useFormStyle } from '../styles/styles';
+import useAppStyle from '../styles/styles';
 import InfiniteProgressBar from './InfiniteProgressBar';
 
 /**
@@ -12,7 +12,7 @@ import InfiniteProgressBar from './InfiniteProgressBar';
  * @param {*} props is { stateUser: [ user, setUser ] }
  */
 const Connect = (props) => {
-    const classes = useFormStyle();
+    const classes = useAppStyle();
 
     // State of the component
     const [ pseudo, setPseudo ] = useState("");
@@ -24,21 +24,23 @@ const Connect = (props) => {
     
     // If the user is already connected we redirect him/her to the homepage
     if(user)
-        window.location = "/";
+        this.props.history.push("/");
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setShowProgressBar(true);
         // ask the API to log the user in
-        API.post('user/signin', { "pseudo": pseudo, "password": password }).then(
+        API.post('user/signin', { "pseudo": pseudo, "password": password })
+        .then(
             res => { // login success
                 setUser({ // set the new user
                     name: res.data.name,
                     pseudo: res.data.pseudo,
-                    role: res.data.role
+                    role: res.data.role,
+                    _id: res.data._id
                 });
                 window.localStorage.setItem("token", res.data.token); // store the JWT
-                window.location = '/'; // redirect to home page
+                this.props.history.push('/'); // redirect to home page
             },
             err => { // login failure
                 console.log("Error from the API: " + err);

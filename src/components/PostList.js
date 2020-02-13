@@ -6,11 +6,8 @@ import InfiniteProgressBar from './InfiniteProgressBar';
 import API from '../API';
 
 /**
- * TODOs:
- * - Maybe a props to know what we must fetch (add props)
- *   - all the recent posts
- *   - only the user's posts
- *   - some specific posts
+ * Improvement:
+ * - Why not using media queries to set the number of posts to display per line?
  */
 
 // Constants
@@ -24,8 +21,6 @@ const useStyles = makeStyles({
         justifyContent: "center"
     },
     list: {
-        width: "80%", // let white bands on the sides
-        marginLeft: "10%",
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
@@ -36,9 +31,9 @@ const useStyles = makeStyles({
 /**
  * Display a list of posts
  * 
- * @param {*} props is { stateUser: [ user, setUser ] }
+ * @param {*} props is { stateUser: [ user, setUser ] } or {}
  */
-const PostList = () => {
+const PostList = (props) => {
     // style
     const classes = useStyles();
 
@@ -49,10 +44,16 @@ const PostList = () => {
     const [ showProgressBar, setShowProgressBar ] = useState(true);
     const [ alertShown, setAlertShown ] = useState(false);
     const [ errorMsg, setErrorMsg ] = useState('');
+    const user = props.stateUser ? props.stateUser[0] : null;
 
     // functions
     const loadPosts = (page, perPage, showError) => {
-        API.get(`posts?page=${page}&per_page=${perPage}`).then(
+        let path = "posts";
+        let query = `page=${page}&per_page=${perPage}`;
+        if(user) { // if we want only the posts of the currently connected user
+            path += "/myposts";
+        }
+        API.get(`${path}?${query}`).then(
             res => {
                 // fetch and append more posts
                 setShowProgressBar(false);

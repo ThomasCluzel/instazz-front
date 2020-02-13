@@ -3,20 +3,11 @@ import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import { AppBar, Toolbar, IconButton, Button, makeStyles, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { HomeOutlined, AccountCircleOutlined, FingerprintOutlined, BorderColorOutlined } from '@material-ui/icons';
 import MenuIcon from '@material-ui/icons/Menu';
-import CreatePost from './CreatePost';
 import theme from '../styles/theme';
 import ConnectionPage from '../pages/ConnectionPage';
 import RegistrationPage from '../pages/RegistrationPage';
 import HomePage from '../pages/HomePage';
-
-/**
- * TODOs:
- * - Display correct pages in the Routes
- *   - Connection : OK
- *   - Registration : OK
- *   - Profile
- *   - Home page : OK
- */
+import ProfilePage from '../pages/ProfilePage';
 
 // NavBar style
 const useStyle = makeStyles(theme => ({
@@ -34,6 +25,7 @@ const useStyle = makeStyles(theme => ({
 const AppNavBar = () => {
     const classes = useStyle();
 
+    // state
     const [ drawerOpen, setDrawerOpen ] = useState(false);
     const [ user, setUser ] = useState(null);
 
@@ -44,9 +36,10 @@ const AppNavBar = () => {
         if(user) {
             localStorage.removeItem("token"); // clear JWT
             setUser(null); // clear app state
+            this.props.history.push("/"); // and redirect the user to the home page
         }
         else { // otherwise, we redirect him/her to the connection page
-            window.location = "/connect";
+            this.props.history.push("/connect");
         }
     };
 
@@ -104,8 +97,8 @@ const AppNavBar = () => {
             <Switch>
                 <Route path="/connect"><ConnectionPage stateUser={[user, setUser]} /></Route>
                 <Route path="/register"><RegistrationPage stateUser={[user, setUser]} /></Route>
-                <Route path="/profile"><CreatePost /></Route>
-                <Route path="/"><HomePage stateUser={[user, setUser]} /></Route>
+                <Route path="/profile"><ProfilePage stateUser={[user, setUser]} /></Route>
+                <Route path="/"><HomePage /></Route>
             </Switch>
         </BrowserRouter>
     );
