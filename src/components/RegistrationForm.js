@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import { Button, Snackbar } from '@material-ui/core';
 import Alert from "@material-ui/lab/Alert";
 import theme from '../styles/theme';
-import { useFormStyle} from '../styles/styles';
+import useAppStyle from '../styles/styles';
 import InfiniteProgressBar from './InfiniteProgressBar';
 
 /**
@@ -13,7 +13,7 @@ import InfiniteProgressBar from './InfiniteProgressBar';
  * @param {*} props is { stateUser: [ user, setUser ] }
  */
 const RegistrationForm = (props) => {
-    const classes = useFormStyle();
+    const classes = useAppStyle();
 
     // state
     const [ name, setName ] = useState('');

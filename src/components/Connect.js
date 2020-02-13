@@ -3,7 +3,7 @@ import API from '../API';
 import { Snackbar, TextField, Button } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import theme from '../styles/theme';
-import { useFormStyle } from '../styles/styles';
+import useAppStyle from '../styles/styles';
 import InfiniteProgressBar from './InfiniteProgressBar';
 
 /**
@@ -12,7 +12,7 @@ import InfiniteProgressBar from './InfiniteProgressBar';
  * @param {*} props is { stateUser: [ user, setUser ] }
  */
 const Connect = (props) => {
-    const classes = useFormStyle();
+    const classes = useAppStyle();
 
     // State of the component
     const [ pseudo, setPseudo ] = useState("");

@@ -3,23 +3,23 @@ import { Snackbar, TextField, Button } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import API from "../API"
 import theme from '../styles/theme';
+import useAppStyle from '../styles/styles';
 
 /**
- * TODO:
- * - Documentation
- * - Remove old version
- * - Style CSS (like other forms)
- * - Test if it works
+ * Improvements:
+ * - How about being able to modify posts?
  */
 
 /**
- * TODO
+ * The form to fill for a user to post a new post
+ * and upload an image.
  * 
  * @param {} props is { stateUser: [ user, setUser ] } 
  */
 const CreatePost = (props) => {
     // style
-    //TODO
+    const classes = useAppStyle();
+    const styleDescriptionField = { width: "100%" };
 
     // state
     const [ description, setDescription ] = useState("");
@@ -51,120 +51,44 @@ const CreatePost = (props) => {
         );
     }
     const uploadImage = (e) => {
-        setImage(e.target.files[0]);
-        setImageURL(URL.createObjectURL(e.target.files[0]));
+        if(e.target.files.length > 0) {
+            setImage(e.target.files[0]);
+            setImageURL(URL.createObjectURL(e.target.files[0]));
+        }
     }
 
     return (
         <div>
-            <Snackbar open={errorAlert} autoHideDuration={6000} onClose={() => setErrorAlert(false)}>
-                <Alert severity="error">
-                    <p>{errMsg}</p>
-                </Alert>
-            </Snackbar>
-            <Snackbar open={successAlert} autoHideDuration={3000} onClose={() => setSuccessAlert(false)}>
-                <Alert severity="success">
-                    <p>Posted!</p>
-                </Alert>
-            </Snackbar>
-
-            <form onSubmit={sendPost}>
-                <input type="file" onChange={uploadImage} />
+            <form onSubmit={sendPost} className={classes.form}>
+                <Button component="label" variant={theme.props.variant} color="secondary" >
+                    Upload an image
+                    <input type="file" onChange={uploadImage} style={{display: "none"}} />
+                </Button>
+                <br />
                 <img src={imageURL} alt="" />
                 <br />
                 <TextField name="description" required label="Description"
                     variant={theme.props.variant} multiline rows="5"
-                    defaultValue={description} onChange={(e) => setDescription(e.target.value)} />
+                    defaultValue={description} onChange={(e) => setDescription(e.target.value)}
+                    style={styleDescriptionField} />
                 <br />
                 <Button type="submit" variant={theme.props.variant} color="primary">
                     Post
                 </Button>
             </form>
+
+            <Snackbar open={errorAlert} autoHideDuration={6000} onClose={() => setErrorAlert(false)}>
+                <Alert severity="error">
+                    {errMsg}
+                </Alert>
+            </Snackbar>
+            <Snackbar open={successAlert} autoHideDuration={3000} onClose={() => setSuccessAlert(false)}>
+                <Alert severity="success">
+                    Posted!
+                </Alert>
+            </Snackbar>
         </div>
     );
 };
-
-/*
-class CreatePost extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      description: "",
-      author: (props.user ? props.user : ""),
-      successAlert: false,
-      errorAlert: false,
-      image: "",
-      imageURL: "",
-      errMsg: ""
-    };
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-
-    this.setState({
-      [name]: value
-    });
-  }
-
-  handleSubmit(e){
-    let req = new FormData();
-    req.append("description", this.state.description);
-    req.append("author", this.state.author)
-    req.append("imageData", this.state.image);
-
-    API.post('posts', req).then(
-      res => { 
-        this.setState({successAlert: true});
-      },
-      err => { 
-        console.error("Error: " + err);
-        this.setState({errMsg: ""+err});
-        this.setState({errorAlert: true});
-      }
-    );
-    e.preventDefault();
-  }
-
-  uploadImage(e){
-    this.setState({
-      imageURL: URL.createObjectURL(e.target.files[0]),
-      image: e.target.files[0]
-    });
-  }
-
-  render() {
-    return (
-      <div>
-        <h2>Write a post :</h2>
-        <Snackbar open={this.state.errorAlert}>
-          <Alert severity="error">
-            <p>Error while posting your post : {this.state.errMsg}</p>
-          </Alert>
-        </Snackbar>
-        <Snackbar open={this.state.successAlert}>
-          <Alert severity="success">
-            <p>Your post has been posted !</p>
-          </Alert>
-        </Snackbar>
-        <form onSubmit={(e) => this.handleSubmit(e)}>
-          <input type="file" onChange={(e) => this.uploadImage(e)}/>
-          <img src={this.state.imageURL} alt=""/>
-          <br/>
-          <TextField multiline rows="5" name="description" required id="standard-required" label="Description" defaultValue={this.state.description} onChange={this.handleInputChange} />
-          <br/> <br/>
-          <Button type="submit" variant="contained" color="primary">
-            Post
-          </Button>
-        </form>
-      </div>
-    );
-  }
-}
-*/
 
 export default CreatePost;

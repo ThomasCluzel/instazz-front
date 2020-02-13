@@ -5,6 +5,11 @@ import PostListItem from './PostListItem';
 import InfiniteProgressBar from './InfiniteProgressBar';
 import API from '../API';
 
+/**
+ * Improvement:
+ * - Why not using media queries to set the number of posts to display per line?
+ */
+
 // Constants
 const NUMBER_OF_INITIAL_POST = 12; // load 10 posts at the beginning
 const NUMBER_OF_POST_TO_LOAD = NUMBER_OF_INITIAL_POST / 2; // each time the user reach the end
@@ -16,8 +21,6 @@ const useStyles = makeStyles({
         justifyContent: "center"
     },
     list: {
-        width: "80%", // let white bands on the sides
-        marginLeft: "10%",
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
