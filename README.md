@@ -10,7 +10,14 @@ This project uses `dotenv` to set the API_URL.
 For the server to work, it needs a `.env` file at the root of the project
 containing:
 ```
-API_HOST="domain.name:port"
+REACT_APP_API_URL="domain.name:port"
+```
+
+## Run the application
+
+To run the test server:
+```sh
+npm run start
 ```
 
 --------------------------------------------------------------------------------
