@@ -57,7 +57,7 @@ const PostList = (props) => {
             res => {
                 // fetch and append more posts
                 setShowProgressBar(false);
-                setPostList(postList.concat(res.data));
+                setPostList(postList ? postList.concat(res.data.posts) : res.data.posts);
             },
             err => {
                 // we do not want to bother the user with these errors
