@@ -8,6 +8,7 @@ import API from '../API';
 /**
  * Improvement:
  * - Why not using media queries to set the number of posts to display per line?
+ * - Why not using a timer to check if new posts have been posted ?
  */
 
 // Constants
@@ -50,10 +51,15 @@ const PostList = (props) => {
     const loadPosts = (page, perPage, showError) => {
         let path = "posts";
         let query = `page=${page}&per_page=${perPage}`;
+        let config = {};
         if(user) { // if we want only the posts of the currently connected user
             path += "/myposts";
+            const token = window.localStorage.getItem("token");
+            config = {
+                headers: { Authorization: `${token}` }
+            };
         }
-        API.get(`${path}?${query}`).then(
+        API.get(`${path}?${query}`, config).then(
             res => {
                 // fetch and append more posts
                 setShowProgressBar(false);

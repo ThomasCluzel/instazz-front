@@ -4,6 +4,7 @@ import PostList from '../components/PostList';
 import theme from '../styles/theme';
 import CreatePost from '../components/CreatePost';
 import useAppStyle from '../styles/styles';
+import { useHistory } from 'react-router-dom';
 
 /**
  * The ProfilePage component is the page that enables the user
@@ -12,8 +13,14 @@ import useAppStyle from '../styles/styles';
  * @param {*} props is { stateUser: [ user, setUser ] }
  */
 const ProfilePage = (props) => {
-    // style
+    // Style
     const classes = useAppStyle();
+
+    // This page is only available to logged users
+    let history = useHistory();
+    const user = props.stateUser[0];
+    if(!user)
+        history.push("/"); // back to home page
 
     return (
         <div className={classes.page} >

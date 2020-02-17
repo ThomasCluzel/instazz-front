@@ -17,8 +17,8 @@ const PostListItem = ({post}) => (
     <Card variant={theme.props.variant} style={cardStyle} >
         <CardMedia
             component="img"
-            image={post.image.filename}
-            alt={"posted by " + post.author.pseudo}
+            src={'data:image/png;base64,' + post.imageData}
+            alt={post.image.filename}
         />
         <CardContent>
             <Typography variant="h6" color="textPrimary">
