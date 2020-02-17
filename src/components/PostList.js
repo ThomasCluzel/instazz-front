@@ -8,6 +8,7 @@ import API from '../API';
 /**
  * Improvement:
  * - Why not using media queries to set the number of posts to display per line?
+ * - Why not using a timer to check if new posts have been posted?
  */
 
 // Constants
@@ -41,6 +42,7 @@ const PostList = (props) => {
     const [ errorFromServer, setErrorFromServer ] = useState(false);
     const [ postList, setPostList ] = useState(null);
     const [ currentPageOfPosts, setCurrentPageOfPosts ] = useState(1);
+    const [ endReached, setEndReached ] = useState(false);
     const [ showProgressBar, setShowProgressBar ] = useState(true);
     const [ alertShown, setAlertShown ] = useState(false);
     const [ errorMsg, setErrorMsg ] = useState('');
@@ -50,14 +52,21 @@ const PostList = (props) => {
     const loadPosts = (page, perPage, showError) => {
         let path = "posts";
         let query = `page=${page}&per_page=${perPage}`;
+        let config = {};
         if(user) { // if we want only the posts of the currently connected user
             path += "/myposts";
+            const token = window.localStorage.getItem("token");
+            config = {
+                headers: { Authorization: `${token}` }
+            };
         }
-        API.get(`${path}?${query}`).then(
+        API.get(`${path}?${query}`, config).then(
             res => {
                 // fetch and append more posts
                 setShowProgressBar(false);
-                setPostList(postList.concat(res.data));
+                setPostList(postList ? postList.concat(res.data.posts) : res.data.posts);
+                if(res.data.posts.length === 0) // end of the list reached
+                    setEndReached(true);
             },
             err => {
                 // we do not want to bother the user with these errors
@@ -82,11 +91,11 @@ const PostList = (props) => {
 
     // event listener
     window.onscroll = function(e) {
-        if (!showProgressBar && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        if (!endReached && !showProgressBar && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
             // the user has reached the bottom of the page (and read all posts)
             setShowProgressBar(true);
+            loadPosts(currentPageOfPosts + 1, NUMBER_OF_POST_TO_LOAD);
             setCurrentPageOfPosts(currentPageOfPosts + 1);
-            loadPosts(currentPageOfPosts, NUMBER_OF_POST_TO_LOAD);
         }
     };
 
@@ -98,10 +107,13 @@ const PostList = (props) => {
 
             { errorFromServer ?
                 <p className={classes.center}>{errorMsg}</p>
-            :
+            : postList && postList.length > 0 ?
                 <List className={classes.list}>
-                    { postList && postList.map( post => <PostListItem post={post} key={post._id} />) }
+                    { postList.map( post => <PostListItem post={post} key={post._id} />) }
                 </List>
+            :   <p>
+                    { user ? "You have not posted anything yet." : "No post were found." }
+                </p>
             }
 
             <InfiniteProgressBar isVisible={showProgressBar && !errorFromServer} />
