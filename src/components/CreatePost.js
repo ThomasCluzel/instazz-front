@@ -17,11 +17,11 @@ import useAppStyle from '../styles/styles';
  * @param {} props is { stateUser: [ user, setUser ] } 
  */
 const CreatePost = (props) => {
-    // style
+    // Style
     const classes = useAppStyle();
     const styleDescriptionField = { width: "100%" };
 
-    // state
+    // State
     const [ description, setDescription ] = useState("");
     const [ successAlert, setSuccessAlert ] = useState(false);
     const [ errorAlert, setErrorAlert ] = useState(false);
@@ -30,7 +30,8 @@ const CreatePost = (props) => {
     const [ errMsg, setErrMsg ] = useState("");
     const user = props.stateUser[0];
 
-    // functions
+    // Event handlers
+    const resetPostList = props.resetPostList;
     const sendPost = (e) => {
         e.preventDefault();
 
@@ -39,9 +40,20 @@ const CreatePost = (props) => {
         req.append("author", user._id);
         req.append("imageData", image);
 
-        API.post('posts', req).then(
+        const token = window.localStorage.getItem("token");
+        const config = {
+            headers: { Authorization: `${token}` }
+        };
+
+        API.post('posts', req, config).then(
             res => {
                 setSuccessAlert(true);
+                // clean the form
+                setDescription("");
+                setImage(null);
+                setImageURL(null);
+                // and refresh the post list
+                resetPostList();
             },
             err => { 
                 console.error("" + err);
@@ -69,7 +81,7 @@ const CreatePost = (props) => {
                 <br />
                 <TextField name="description" required label="Description"
                     variant={theme.props.variant} multiline rows="5"
-                    defaultValue={description} onChange={(e) => setDescription(e.target.value)}
+                    value={description} onChange={(e) => setDescription(e.target.value)}
                     style={styleDescriptionField} />
                 <br />
                 <Button type="submit" variant={theme.props.variant} color="primary">

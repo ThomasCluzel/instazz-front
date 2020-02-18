@@ -5,6 +5,7 @@ import { Alert } from "@material-ui/lab";
 import theme from '../styles/theme';
 import useAppStyle from '../styles/styles';
 import InfiniteProgressBar from './InfiniteProgressBar';
+import { useHistory, Redirect } from 'react-router-dom';
 
 /**
  * The form to fill out for the user to log in.
@@ -13,6 +14,7 @@ import InfiniteProgressBar from './InfiniteProgressBar';
  */
 const Connect = (props) => {
     const classes = useAppStyle();
+    let history = useHistory();
 
     // State of the component
     const [ pseudo, setPseudo ] = useState("");
@@ -24,13 +26,13 @@ const Connect = (props) => {
     
     // If the user is already connected we redirect him/her to the homepage
     if(user)
-        this.props.history.push("/");
+        return (<Redirect to="/" />);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setShowProgressBar(true);
         // ask the API to log the user in
-        API.post('user/signin', { "pseudo": pseudo, "password": password })
+        API.post('users/signin', { "pseudo": pseudo, "password": password })
         .then(
             res => { // login success
                 setUser({ // set the new user
@@ -40,7 +42,7 @@ const Connect = (props) => {
                     _id: res.data._id
                 });
                 window.localStorage.setItem("token", res.data.token); // store the JWT
-                this.props.history.push('/'); // redirect to home page
+                history.push('/'); // redirect to home page
             },
             err => { // login failure
                 console.log("Error from the API: " + err);

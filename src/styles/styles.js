@@ -15,7 +15,9 @@ const useAppStyle = makeStyles(() => ({
         width: "80%",
         marginLeft: "10%",
         // by default elements should be centered on the page
-        textAlign: "center"
+        textAlign: "center",
+        // let a space between the page and the nav bar
+        marginTop: "2%"
     }
 }));
 

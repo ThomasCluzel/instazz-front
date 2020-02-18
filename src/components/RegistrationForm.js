@@ -6,6 +6,7 @@ import Alert from "@material-ui/lab/Alert";
 import theme from '../styles/theme';
 import useAppStyle from '../styles/styles';
 import InfiniteProgressBar from './InfiniteProgressBar';
+import { useHistory, Redirect } from 'react-router-dom';
 
 /**
  * Component to register a new user
@@ -14,6 +15,7 @@ import InfiniteProgressBar from './InfiniteProgressBar';
  */
 const RegistrationForm = (props) => {
     const classes = useAppStyle();
+    let history = useHistory();
 
     // state
     const [ name, setName ] = useState('');
@@ -23,7 +25,11 @@ const RegistrationForm = (props) => {
     const [ alertShown, setAlertShown ] = useState(false);
     const [ errorMsg, setErrorMsg ] = useState('');
     const [ showProgressBar, setShowProgressBar ] = useState(false);
-    const setUser = props.stateUser.setUser; // props.stateUser === [ user, setUser ]
+    const [ user, setUser ] = props.stateUser;
+
+    // If the user is already connected we redirect him/her to the homepage
+    if(user)
+        return (<Redirect to="/" />);
 
     const submitForm = (e) => {
         e.preventDefault();
@@ -44,7 +50,7 @@ const RegistrationForm = (props) => {
                     _id: res.data._id
                 });
                 window.localStorage.setItem("token", res.data.token);
-                this.props.history.push('/');
+                history.push('/');
             },
             err => {
                 setErrorMsg(err+"");
