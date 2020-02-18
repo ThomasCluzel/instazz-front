@@ -1,6 +1,7 @@
 import React from 'react';
-import { Drawer, List, Link, ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core';
 import { HomeOutlined, AccountCircleOutlined, FingerprintOutlined, BorderColorOutlined } from '@material-ui/icons';
+import { useHistory } from 'react-router-dom';
 
 // Style
 const useStyle = makeStyles(theme => ({
@@ -12,7 +13,7 @@ const useStyle = makeStyles(theme => ({
 /**
  * A drawer on the left of the page.
  * 
- * @param {*} props are stateUser={[user, setUser]} stateDrawerOpen={[ drawerOpen, setDrawerOpen ]} toggleDrawer={toggleDrawer}
+ * @param {*} props are { stateUser=[user, setUser], stateDrawerOpen=[ drawerOpen, setDrawerOpen ], toggleDrawer=toggleDrawer }
  */
 const AppDrawer = (props) => {
     const classes = useStyle();
@@ -20,40 +21,39 @@ const AppDrawer = (props) => {
     // State
     const user = props.stateUser[0];
     const drawerOpen = props.stateDrawerOpen[0];
-    const toggleDrawer = props.toggleDrawer;
+    const closeDrawer = props.closeDrawer;
+    let history = useHistory();
+
+    // Event handler
+    const menuItemClicked = (link) => () => {
+        history.push(link);
+        closeDrawer();
+    };
 
     return (
-        <Drawer open={drawerOpen} onClose={ toggleDrawer(false) }>
+        <Drawer open={drawerOpen} onClose={closeDrawer}>
             <List>
-                <Link to="/" onClick={toggleDrawer(false)}>
-                    <ListItem button key="home" className={classes.drawerButton}>
-                        <ListItemIcon><HomeOutlined color="primary" /></ListItemIcon>
-                        <ListItemText primary="Home" />
-                    </ListItem>
-                </Link>
+                <ListItem button key="home" className={classes.drawerButton} onClick={menuItemClicked("/")}>
+                    <ListItemIcon><HomeOutlined color="primary" /></ListItemIcon>
+                    <ListItemText primary="Home" />
+                </ListItem>
                 { user &&
-                    <Link to="/profile" onClick={toggleDrawer(false)}>
-                        <ListItem button key="profile" className={classes.drawerButton}>
-                            <ListItemIcon><AccountCircleOutlined color="primary" /></ListItemIcon>
-                            <ListItemText primary="Profile" />
-                        </ListItem>
-                    </Link>
+                    <ListItem button key="profile" className={classes.drawerButton} onClick={menuItemClicked("/profile")}>
+                        <ListItemIcon><AccountCircleOutlined color="primary" /></ListItemIcon>
+                        <ListItemText primary="Profile" />
+                    </ListItem>
                 }
                 { !user &&
-                    <Link to="/connect" onClick={toggleDrawer(false)}>
-                        <ListItem button key="connect" className={classes.drawerButton}>
-                            <ListItemIcon><FingerprintOutlined color="primary" /></ListItemIcon>
-                            <ListItemText primary="Login" />
-                        </ListItem>
-                    </Link>
+                    <ListItem button key="connect" className={classes.drawerButton} onClick={menuItemClicked("/connect")}>
+                        <ListItemIcon><FingerprintOutlined color="primary" /></ListItemIcon>
+                        <ListItemText primary="Login" />
+                    </ListItem>
                 }
                 { !user &&
-                    <Link to="/register" onClick={toggleDrawer(false)}>
-                        <ListItem button key="register" className={classes.drawerButton}>
-                            <ListItemIcon><BorderColorOutlined color="primary" /></ListItemIcon>
-                            <ListItemText primary="Register" />
-                        </ListItem>
-                    </Link>
+                    <ListItem button key="register" className={classes.drawerButton} onClick={menuItemClicked("/register")}>
+                        <ListItemIcon><BorderColorOutlined color="primary" /></ListItemIcon>
+                        <ListItemText primary="Register" />
+                    </ListItem>
                 }
             </List>
         </Drawer>

@@ -22,8 +22,6 @@ npm run start
 
 ## TODO
 
-* When we register or connect, display a welcome message.
-* When there is no post in a postList, display "There is no post".
 * When we post a new post, it should be added to the list of posts below.
 * Stop refreshing the list of posts if we reached the end of the list.
 

@@ -8,7 +8,7 @@ import API from '../API';
 /**
  * Improvement:
  * - Why not using media queries to set the number of posts to display per line?
- * - Why not using a timer to check if new posts have been posted ?
+ * - Why not using a timer to check if new posts have been posted?
  */
 
 // Constants
@@ -104,10 +104,13 @@ const PostList = (props) => {
 
             { errorFromServer ?
                 <p className={classes.center}>{errorMsg}</p>
-            :
+            : postList && postList.length > 0 ?
                 <List className={classes.list}>
-                    { postList && postList.map( post => <PostListItem post={post} key={post._id} />) }
+                    { postList.map( post => <PostListItem post={post} key={post._id} />) }
                 </List>
+            :   <p>
+                    { user ? "You have not posted anything yet." : "No post were found." }
+                </p>
             }
 
             <InfiniteProgressBar isVisible={showProgressBar && !errorFromServer} />

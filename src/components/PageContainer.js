@@ -16,20 +16,20 @@ const PageContainer = () => {
     const [ drawerOpen, setDrawerOpen ] = useState(false);
     const [ user, setUser ] = useState(null);
 
-    // Event handlers
-    const toggleDrawer = (newState) => () => setDrawerOpen(newState);
-
     return (
         <BrowserRouter>
-            <AppNav stateUser={[user, setUser]} toggleDrawer={toggleDrawer} />
+            <AppNav stateUser={[user, setUser]}
+                openDrawer={() => setDrawerOpen(true)} />
 
-            <AppDrawer stateUser={[user, setUser]} stateDrawerOpen={[ drawerOpen, setDrawerOpen ]} toggleDrawer={toggleDrawer} />
+            <AppDrawer stateUser={[user, setUser]}
+                stateDrawerOpen={[ drawerOpen, setDrawerOpen ]}
+                closeDrawer={() => setDrawerOpen(false)} />
 
             <Switch>
                 <Route path="/connect"><ConnectionPage stateUser={[user, setUser]} /></Route>
                 <Route path="/register"><RegistrationPage stateUser={[user, setUser]} /></Route>
                 <Route path="/profile"><ProfilePage stateUser={[user, setUser]} /></Route>
-                <Route path="/"><HomePage /></Route>
+                <Route path="/"><HomePage stateUser={[user, setUser]} /></Route>
             </Switch>
         </BrowserRouter>
     );

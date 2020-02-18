@@ -18,9 +18,9 @@ const useStyle = makeStyles(theme => ({
  * A component to display the nav banner at the top of the page.
  * 
  * @param {*} stateUser is  [ user, setUser ]
- * @param {*} toggleDrawer is a function to toggle the drawer on the left of the page
+ * @param {*} openDrawer is a function to toggle the drawer on the left of the page
  */
-const AppNav = ({stateUser, toggleDrawer}) => {
+const AppNav = ({stateUser, openDrawer}) => {
     const classes = useStyle();
     let history = useHistory();
 
@@ -43,7 +43,7 @@ const AppNav = ({stateUser, toggleDrawer}) => {
     return (
         <AppBar position="static">
             <Toolbar className={classes.toolbar} >
-                <IconButton edge="start" onClick={ toggleDrawer(true) } >
+                <IconButton edge="start" onClick={openDrawer} >
                     <MenuIcon className={classes.toolbarButton} />
                 </IconButton>
                 <h1>InstaZZ</h1>
