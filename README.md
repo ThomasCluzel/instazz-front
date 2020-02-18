@@ -20,9 +20,5 @@ To run the test server:
 npm run start
 ```
 
-## TODO
-
-* When we post a new post, it should be added to the list of posts below.
-
 --------------------------------------------------------------------------------
 Authors: Bruno Jousse & Thomas Cluzel
