@@ -91,8 +91,8 @@ const PostList = (props) => {
         if (!showProgressBar && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
             // the user has reached the bottom of the page (and read all posts)
             setShowProgressBar(true);
+            loadPosts(currentPageOfPosts + 1, NUMBER_OF_POST_TO_LOAD);
             setCurrentPageOfPosts(currentPageOfPosts + 1);
-            loadPosts(currentPageOfPosts, NUMBER_OF_POST_TO_LOAD);
         }
     };
 
