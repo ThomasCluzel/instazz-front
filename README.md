@@ -22,7 +22,6 @@ npm run start
 
 ## TODO
 
-* Stop refreshing the list of posts if we reached the end of the list.
 * When we post a new post, it should be added to the list of posts below.
 
 --------------------------------------------------------------------------------

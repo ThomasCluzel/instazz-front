@@ -42,6 +42,7 @@ const PostList = (props) => {
     const [ errorFromServer, setErrorFromServer ] = useState(false);
     const [ postList, setPostList ] = useState(null);
     const [ currentPageOfPosts, setCurrentPageOfPosts ] = useState(1);
+    const [ endReached, setEndReached ] = useState(false);
     const [ showProgressBar, setShowProgressBar ] = useState(true);
     const [ alertShown, setAlertShown ] = useState(false);
     const [ errorMsg, setErrorMsg ] = useState('');
@@ -64,6 +65,8 @@ const PostList = (props) => {
                 // fetch and append more posts
                 setShowProgressBar(false);
                 setPostList(postList ? postList.concat(res.data.posts) : res.data.posts);
+                if(res.data.posts.length === 0) // end of the list reached
+                    setEndReached(true);
             },
             err => {
                 // we do not want to bother the user with these errors
@@ -88,7 +91,7 @@ const PostList = (props) => {
 
     // event listener
     window.onscroll = function(e) {
-        if (!showProgressBar && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        if (!endReached && !showProgressBar && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
             // the user has reached the bottom of the page (and read all posts)
             setShowProgressBar(true);
             loadPosts(currentPageOfPosts + 1, NUMBER_OF_POST_TO_LOAD);
