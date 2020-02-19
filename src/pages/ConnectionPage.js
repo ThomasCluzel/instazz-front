@@ -19,7 +19,7 @@ const ConnectionPage = (props) => {
             <Typography variant={theme.props.pageTitleVariant}>Connection</Typography>
             <Connect stateUser={props.stateUser} />
             <Typography color="textPrimary">
-                Not part of InstaZZ yet? <a href="/register">Create an account</a>, it's free.
+                Not part of InstaZZ yet? <a href="/register">Create an account</a>, it&apos;s free.
             </Typography>
         </div>
     )

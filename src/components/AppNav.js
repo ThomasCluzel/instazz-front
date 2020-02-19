@@ -5,7 +5,7 @@ import theme from '../styles/theme';
 import { useHistory } from 'react-router-dom';
 
 // NavBar style
-const useStyle = makeStyles(theme => ({
+const useStyle = makeStyles(() => ({
     toolbar: {
         justifyContent: "space-between"
     },

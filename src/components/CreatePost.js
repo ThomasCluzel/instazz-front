@@ -46,7 +46,7 @@ const CreatePost = (props) => {
         };
 
         API.post('posts', req, config).then(
-            res => {
+            () => {
                 setSuccessAlert(true);
                 // clean the form
                 setDescription("");

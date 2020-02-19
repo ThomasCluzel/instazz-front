@@ -90,7 +90,7 @@ const PostList = (props) => {
     }
 
     // event listener
-    window.onscroll = function(e) {
+    window.onscroll = () => {
         if (!endReached && !showProgressBar && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
             // the user has reached the bottom of the page (and read all posts)
             setShowProgressBar(true);
