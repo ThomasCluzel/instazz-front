@@ -4,17 +4,11 @@ import theme from '../styles/theme';
 
 /**
  * Improvements:
- * - Why not a link on the author of the post to visit his/her profile
+ * - Why not adding a link on the author's pseudo to visit his/her profile?
  */
 
-// Style (don't need makeStyle)
-const cardStyle = {
-    width: "30%",
-    marginBottom: "2%"
-};
-
 const PostListItem = ({post}) => (
-    <Card variant={theme.props.variant} style={cardStyle} >
+    <Card variant={theme.props.variant}>
         <CardMedia
             component="img"
             src={'data:image/png;base64,' + post.imageData}

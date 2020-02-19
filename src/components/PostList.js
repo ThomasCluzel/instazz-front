@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { List, Snackbar, makeStyles } from '@material-ui/core';
+import { Snackbar, makeStyles, GridList, GridListTile } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import PostListItem from './PostListItem';
 import InfiniteProgressBar from './InfiniteProgressBar';
@@ -11,8 +11,13 @@ import API from '../API';
  * - Why not using a timer to check if new posts have been posted?
  */
 
+/**
+ * TODO: 
+ * - Enable the AppNavBar to move
+ */
+
 // Constants
-const NUMBER_OF_INITIAL_POST = 12; // load 10 posts at the beginning
+const NUMBER_OF_INITIAL_POST = 12; // posts loaded at the beginning
 const NUMBER_OF_POST_TO_LOAD = NUMBER_OF_INITIAL_POST / 2; // each time the user reach the end
 
 // Style
@@ -20,12 +25,6 @@ const useStyles = makeStyles({
     center: {
         display: "flex",
         justifyContent: "center"
-    },
-    list: {
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "space-between"
     }
 });
 
@@ -41,7 +40,7 @@ const PostList = (props) => {
     // state
     const [ errorFromServer, setErrorFromServer ] = useState(false);
     const [ postList, setPostList ] = useState(null);
-    const [ currentPageOfPosts, setCurrentPageOfPosts ] = useState(1);
+    const [ currentPageOfPosts, setCurrentPageOfPosts ] = useState(2); // 2 pages are loaded at the beginning
     const [ endReached, setEndReached ] = useState(false);
     const [ showProgressBar, setShowProgressBar ] = useState(true);
     const [ alertShown, setAlertShown ] = useState(false);
@@ -57,7 +56,7 @@ const PostList = (props) => {
             path += "/myposts";
             const token = window.localStorage.getItem("token");
             config = {
-                headers: { Authorization: `${token}` }
+                headers: { Authorization: token }
             };
         }
         API.get(`${path}?${query}`, config).then(
@@ -108,9 +107,13 @@ const PostList = (props) => {
             { errorFromServer ?
                 <p className={classes.center}>{errorMsg}</p>
             : postList && postList.length > 0 ?
-                <List className={classes.list}>
-                    { postList.map( post => <PostListItem post={post} key={post._id} />) }
-                </List>
+                <GridList cols={3} cellHeight="auto" spacing={10}>
+                    { postList.map( post => (
+                        <GridListTile key={post._id}>
+                            <PostListItem post={post} />
+                        </GridListTile>
+                    )) }
+                </GridList>
             :   <p>
                     { user ? "You have not posted anything yet." : "No post were found." }
                 </p>
