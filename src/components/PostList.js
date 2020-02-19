@@ -98,6 +98,9 @@ const PostList = (props) => {
         }
     };
 
+    // Compute the number of columns of post to display
+    const numberOfPostOnOneLine = Math.round(window.innerWidth * 0.8 / 300);
+
     return (
         <div>
             <Snackbar open={alertShown} autoHideDuration={5000} onClose={() => setAlertShown(false)}>
@@ -107,7 +110,7 @@ const PostList = (props) => {
             { errorFromServer ?
                 <p className={classes.center}>{errorMsg}</p>
             : postList && postList.length > 0 ?
-                <GridList cols={3} cellHeight="auto" spacing={10}>
+                <GridList cols={numberOfPostOnOneLine} cellHeight="auto" spacing={10}>
                     { postList.map( post => (
                         <GridListTile key={post._id}>
                             <PostListItem post={post} />
