@@ -20,5 +20,9 @@ To run the test server:
 npm run start
 ```
 
+## TODO:
+
+* Keep the user connected with local storage (so that F5 does not kill his session)
+
 --------------------------------------------------------------------------------
 Authors: Bruno Jousse & Thomas Cluzel

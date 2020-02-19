@@ -3,6 +3,7 @@ import { AppBar, Toolbar, IconButton, Button, makeStyles } from '@material-ui/co
 import MenuIcon from '@material-ui/icons/Menu';
 import theme from '../styles/theme';
 import { useHistory } from 'react-router-dom';
+import HideOnScroll from './HideOnScroll';
 
 // NavBar style
 const useStyle = makeStyles(() => ({
@@ -41,19 +42,21 @@ const AppNav = ({stateUser, openDrawer}) => {
     };
 
     return (
-        <AppBar position="static">
-            <Toolbar className={classes.toolbar} >
-                <IconButton edge="start" onClick={openDrawer} >
-                    <MenuIcon className={classes.toolbarButton} />
-                </IconButton>
-                <h1>InstaZZ</h1>
-                <Button variant={theme.props.variant}
-                        className={classes.toolbarButton}
-                        onClick={logInOutButton} >
-                    { (user) ? "Log out" : "Login" }
-                </Button>
-            </Toolbar>
-        </AppBar>
+        <HideOnScroll>
+            <AppBar position="sticky">
+                <Toolbar className={classes.toolbar} >
+                    <IconButton edge="start" onClick={openDrawer} >
+                        <MenuIcon className={classes.toolbarButton} />
+                    </IconButton>
+                    <h1>InstaZZ</h1>
+                    <Button variant={theme.props.variant}
+                            className={classes.toolbarButton}
+                            onClick={logInOutButton} >
+                        { (user) ? "Log out" : "Login" }
+                    </Button>
+                </Toolbar>
+            </AppBar>
+        </HideOnScroll>
     );
 };
 
