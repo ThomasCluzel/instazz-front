@@ -7,13 +7,12 @@ import API from '../API';
 
 /**
  * Improvement:
- * - Why not using media queries to set the number of posts to display per line?
  * - Why not using a timer to check if new posts have been posted?
  */
 
 // Constants
 const NUMBER_OF_LINES_TO_LOAD = 3; // each time the API is queried
-const computeNumberOfPostsPerLine = (width) => Math.round(width * 0.8 / 300);
+const computeNumberOfPostsPerLine = () => Math.round(window.innerWidth * 0.8 / 300);
 
 // Style
 const useStyles = makeStyles({
@@ -29,12 +28,13 @@ const useStyles = makeStyles({
  * @param {*} props is { stateUser: [ user, setUser ] } or {}
  */
 const PostList = (props) => {
-    // style
+    // Style
     const classes = useStyles();
 
-    // state
+    // State
     const [ errorFromServer, setErrorFromServer ] = useState(false);
     const [ postList, setPostList ] = useState(null);
+    const [ numberOfPostsPerLine, setNumberOfPostsPerLine ] = useState(computeNumberOfPostsPerLine());
     const [ currentPageOfPosts, setCurrentPageOfPosts ] = useState(0);
     const [ endReached, setEndReached ] = useState(false);
     const [ showProgressBar, setShowProgressBar ] = useState(true);
@@ -42,10 +42,7 @@ const PostList = (props) => {
     const [ errorMsg, setErrorMsg ] = useState('');
     const user = props.stateUser ? props.stateUser[0] : null;
 
-    // Compute the number of columns of post to display
-    const numberOfPostsPerLine = computeNumberOfPostsPerLine(window.innerWidth);
-
-    // functions
+    // Functions
     const loadPosts = (showError) => {
         // query parameters
         const page = currentPageOfPosts + 1; // fetch next page of post
@@ -83,13 +80,7 @@ const PostList = (props) => {
         );
     };
 
-    // load some initial posts
-    if(!postList) {
-        setPostList([]);
-        loadPosts(true);
-    }
-
-    // event listener
+    // Event listeners
     window.onscroll = () => {
         if (!endReached && !showProgressBar && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
             // the user has reached the bottom of the page (and read all posts)
@@ -97,7 +88,18 @@ const PostList = (props) => {
             loadPosts(); // fetch more to keep the user on our app
         }
     };
+    window.onresize = () => {
+        const computed = computeNumberOfPostsPerLine();
+        if(numberOfPostsPerLine !== computed)
+            setNumberOfPostsPerLine(computed);
+    };
 
+    // load some initial posts
+    if(!postList) {
+        setPostList([]);
+        loadPosts(true);
+    }
+    
     return (
         <div>
             <Snackbar open={alertShown} autoHideDuration={5000} onClose={() => setAlertShown(false)}>
