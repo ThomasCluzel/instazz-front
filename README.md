@@ -10,7 +10,7 @@ This project uses `dotenv` to set the API_URL.
 For the server to work, it needs a `.env` file at the root of the project
 containing:
 ```
-REACT_APP_API_URL="domain.name:port"
+REACT_APP_API_URL="http(s)://domain.name:port"
 ```
 
 ## Run the application
@@ -22,7 +22,7 @@ npm run start
 
 ## TODO:
 
-* Keep the user connected with local storage (so that F5 does not kill his session)
+* Keep the user connected with local storage (so that F5 does not kill the session)
 
 --------------------------------------------------------------------------------
 Authors: Bruno Jousse & Thomas Cluzel

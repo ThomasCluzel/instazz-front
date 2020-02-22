@@ -21,7 +21,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint src/"
+    "lint": "eslint src/",
+    "heroku-postbuild": "react-scripts build && npm install -g serve"
   },
   "eslintConfig": {
     "extends": "react-app"
