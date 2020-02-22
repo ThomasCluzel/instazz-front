@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { List, Snackbar, makeStyles } from '@material-ui/core';
+import { Snackbar, makeStyles, GridList, GridListTile } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import PostListItem from './PostListItem';
 import InfiniteProgressBar from './InfiniteProgressBar';
@@ -7,25 +7,18 @@ import API from '../API';
 
 /**
  * Improvement:
- * - Why not using media queries to set the number of posts to display per line?
  * - Why not using a timer to check if new posts have been posted?
  */
 
 // Constants
-const NUMBER_OF_INITIAL_POST = 12; // load 10 posts at the beginning
-const NUMBER_OF_POST_TO_LOAD = NUMBER_OF_INITIAL_POST / 2; // each time the user reach the end
+const NUMBER_OF_LINES_TO_LOAD = 3; // each time the API is queried
+const computeNumberOfPostsPerLine = () => Math.round(window.innerWidth * 0.8 / 300);
 
 // Style
 const useStyles = makeStyles({
     center: {
         display: "flex",
         justifyContent: "center"
-    },
-    list: {
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "space-between"
     }
 });
 
@@ -35,21 +28,27 @@ const useStyles = makeStyles({
  * @param {*} props is { stateUser: [ user, setUser ] } or {}
  */
 const PostList = (props) => {
-    // style
+    // Style
     const classes = useStyles();
 
-    // state
+    // State
     const [ errorFromServer, setErrorFromServer ] = useState(false);
     const [ postList, setPostList ] = useState(null);
-    const [ currentPageOfPosts, setCurrentPageOfPosts ] = useState(1);
+    const [ numberOfPostsPerLine, setNumberOfPostsPerLine ] = useState(computeNumberOfPostsPerLine());
+    const [ currentPageOfPosts, setCurrentPageOfPosts ] = useState(0);
     const [ endReached, setEndReached ] = useState(false);
     const [ showProgressBar, setShowProgressBar ] = useState(true);
     const [ alertShown, setAlertShown ] = useState(false);
     const [ errorMsg, setErrorMsg ] = useState('');
     const user = props.stateUser ? props.stateUser[0] : null;
 
-    // functions
-    const loadPosts = (page, perPage, showError) => {
+    // Functions
+    const loadPosts = (showError) => {
+        // query parameters
+        const page = currentPageOfPosts + 1; // fetch next page of post
+        setCurrentPageOfPosts(page);
+        const perPage= numberOfPostsPerLine * NUMBER_OF_LINES_TO_LOAD;
+
         let path = "posts";
         let query = `page=${page}&per_page=${perPage}`;
         let config = {};
@@ -57,7 +56,7 @@ const PostList = (props) => {
             path += "/myposts";
             const token = window.localStorage.getItem("token");
             config = {
-                headers: { Authorization: `${token}` }
+                headers: { Authorization: token }
             };
         }
         API.get(`${path}?${query}`, config).then(
@@ -71,34 +70,36 @@ const PostList = (props) => {
             err => {
                 // we do not want to bother the user with these errors
                 if(showError) {
-                    setErrorMsg(err+"");
+                    setErrorMsg("" + err);
                     setAlertShown(true);
                     setErrorFromServer(true);
                 }
-                else{
-                    console.log("" + err);
-                }
+                console.log("" + err);
                 setShowProgressBar(false);
             }
         );
     };
 
-    // load the initial posts the first time only
-    if(!postList) {
-        setPostList([]);
-        loadPosts(1, NUMBER_OF_INITIAL_POST, true);
-    }
-
-    // event listener
-    window.onscroll = function(e) {
+    // Event listeners
+    window.onscroll = () => {
         if (!endReached && !showProgressBar && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
             // the user has reached the bottom of the page (and read all posts)
             setShowProgressBar(true);
-            loadPosts(currentPageOfPosts + 1, NUMBER_OF_POST_TO_LOAD);
-            setCurrentPageOfPosts(currentPageOfPosts + 1);
+            loadPosts(); // fetch more to keep the user on our app
         }
     };
+    window.onresize = () => {
+        const computed = computeNumberOfPostsPerLine();
+        if(numberOfPostsPerLine !== computed)
+            setNumberOfPostsPerLine(computed);
+    };
 
+    // load some initial posts
+    if(!postList) {
+        setPostList([]);
+        loadPosts(true);
+    }
+    
     return (
         <div>
             <Snackbar open={alertShown} autoHideDuration={5000} onClose={() => setAlertShown(false)}>
@@ -108,9 +109,13 @@ const PostList = (props) => {
             { errorFromServer ?
                 <p className={classes.center}>{errorMsg}</p>
             : postList && postList.length > 0 ?
-                <List className={classes.list}>
-                    { postList.map( post => <PostListItem post={post} key={post._id} />) }
-                </List>
+                <GridList cols={numberOfPostsPerLine} cellHeight="auto" spacing={10}>
+                    { postList.map( post => (
+                        <GridListTile key={post._id}>
+                            <PostListItem post={post} />
+                        </GridListTile>
+                    )) }
+                </GridList>
             :   <p>
                     { user ? "You have not posted anything yet." : "No post were found." }
                 </p>

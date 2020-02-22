@@ -1,0 +1,33 @@
+# CI/CD config for Travis CI
+
+sudo: false
+
+language: node_js
+
+# Use latest stable release of node.js
+node_js:
+  - node
+
+# 2 stages
+stages:
+  - test
+  - name: deploy
+    if: branch = master
+
+# 2 tests jobs + 1 deploy job
+jobs:
+  include:
+    - stage: test
+      name: "Unit tests"
+      script: npm run test
+    - stage: test
+      name: "Lint"
+      script: npm run lint
+    - stage: deploy
+      name: "Deploy to heroku"
+      script: skip
+      deploy:
+        provider: heroku
+        api_key: $HEROKU_AUTH_TOKEN
+        app: instazzf2
+        strategy: git

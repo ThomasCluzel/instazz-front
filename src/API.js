@@ -3,5 +3,5 @@
 import axios from 'axios';
 
 export default axios.create({
-  baseURL: 'http://' + process.env.REACT_APP_API_URL + '/api/v1/'
+  baseURL: process.env.REACT_APP_API_URL + '/api/v1/'
 });

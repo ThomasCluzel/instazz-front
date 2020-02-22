@@ -30,10 +30,14 @@ const CreatePost = (props) => {
     const [ errMsg, setErrMsg ] = useState("");
     const user = props.stateUser[0];
 
-    // Event handlers
+    // Functions and event handlers
     const resetPostList = props.resetPostList;
     const sendPost = (e) => {
         e.preventDefault();
+        if(!image || !imageURL) {
+            showError("No image to post");
+            return;
+        }
 
         const req = new FormData();
         req.append("description", description);
@@ -42,23 +46,22 @@ const CreatePost = (props) => {
 
         const token = window.localStorage.getItem("token");
         const config = {
-            headers: { Authorization: `${token}` }
+            headers: { Authorization: token }
         };
 
         API.post('posts', req, config).then(
-            res => {
+            () => {
                 setSuccessAlert(true);
                 // clean the form
                 setDescription("");
                 setImage(null);
                 setImageURL(null);
+                document.getElementById("inputImage").value = "";
                 // and refresh the post list
                 resetPostList();
             },
             err => { 
-                console.error("" + err);
-                setErrMsg(""+err);
-                setErrorAlert(true);
+                showError("" + err)
             }
         );
     }
@@ -68,13 +71,18 @@ const CreatePost = (props) => {
             setImageURL(URL.createObjectURL(e.target.files[0]));
         }
     }
+    const showError = (errorMessage) => {
+        console.error(errorMessage);
+        setErrMsg(errorMessage);
+        setErrorAlert(true);
+    }
 
     return (
         <div>
             <form onSubmit={sendPost} className={classes.form}>
                 <Button component="label" variant={theme.props.variant} color="secondary" >
                     Upload an image
-                    <input type="file" onChange={uploadImage} style={{display: "none"}} />
+                    <input id="inputImage" type="file" onChange={uploadImage} style={{display: "none"}} />
                 </Button>
                 <br />
                 <img src={imageURL} alt="" />
