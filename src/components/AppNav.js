@@ -32,7 +32,7 @@ const AppNav = ({stateUser, openDrawer}) => {
     const logInOutButton = () => {
         // if the user is connected, we must disconnect him/her
         if(user) {
-            localStorage.removeItem("token"); // clear JWT
+            localStorage.removeItem("user"); // clear the user state
             setUser(null); // clear app state
             history.push("/"); // and redirect the user to the home page
         }

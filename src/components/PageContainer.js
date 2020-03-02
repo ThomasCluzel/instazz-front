@@ -14,7 +14,7 @@ import AppDrawer from './AppDrawer';
 const PageContainer = () => {
     // State
     const [ drawerOpen, setDrawerOpen ] = useState(false);
-    const [ user, setUser ] = useState(null);
+    const [ user, setUser ] = useState(JSON.parse(localStorage.getItem("user")));
 
     return (
         <BrowserRouter>

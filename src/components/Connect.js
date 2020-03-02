@@ -35,13 +35,15 @@ const Connect = (props) => {
         API.post('users/signin', { "pseudo": pseudo, "password": password })
         .then(
             res => { // login success
-                setUser({ // set the new user
+                const newUser = { // turn the response to a user object
                     name: res.data.name,
                     pseudo: res.data.pseudo,
                     role: res.data.role,
-                    _id: res.data._id
-                });
-                window.localStorage.setItem("token", res.data.token); // store the JWT
+                    _id: res.data._id,
+                    token: res.data.token
+                }
+                setUser(newUser);
+                localStorage.setItem("user", JSON.stringify(newUser)); // store the user
                 history.push('/'); // redirect to home page
             },
             err => { // login failure
