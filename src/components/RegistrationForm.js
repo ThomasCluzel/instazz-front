@@ -43,13 +43,15 @@ const RegistrationForm = (props) => {
         API.post('users', { name: name, pseudo: pseudo, password: password })
         .then(
             res => {
-                setUser({
+                const newUser = { // turn the response to a user object
                     name: res.data.name,
                     pseudo: res.data.pseudo,
                     role: res.data.role,
-                    _id: res.data._id
-                });
-                window.localStorage.setItem("token", res.data.token);
+                    _id: res.data._id,
+                    token: res.data.token
+                }
+                setUser(newUser);
+                localStorage.setItem("user", JSON.stringify(newUser)); // store the user
                 history.push('/');
             },
             err => {

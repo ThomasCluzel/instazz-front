@@ -54,9 +54,8 @@ const PostList = (props) => {
         let config = {};
         if(user) { // if we want only the posts of the currently connected user
             path += "/myposts";
-            const token = window.localStorage.getItem("token");
             config = {
-                headers: { Authorization: token }
+                headers: { Authorization: user.token }
             };
         }
         API.get(`${path}?${query}`, config).then(

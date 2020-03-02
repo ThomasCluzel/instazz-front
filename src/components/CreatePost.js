@@ -44,9 +44,8 @@ const CreatePost = (props) => {
         req.append("author", user._id);
         req.append("imageData", image);
 
-        const token = window.localStorage.getItem("token");
         const config = {
-            headers: { Authorization: token }
+            headers: { Authorization: user.token }
         };
 
         API.post('posts', req, config).then(
