@@ -2,8 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import App from '../components/App';
 
-test('renders learn react link', () => {
-  const { getByText } = render(<App />);
-  const linkElement = getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test('renders App without crash', () => {
+  const app = render(<App />);
+  expect(app.getByText("InstaZZ")).toBeInTheDocument();
 });
