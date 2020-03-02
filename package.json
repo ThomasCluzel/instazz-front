@@ -19,7 +19,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "echo react-scripts test",
+    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint src/",
     "heroku-postbuild": "react-scripts build && npm install -g serve"
